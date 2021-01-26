@@ -126,7 +126,7 @@
                 this.$refs[formName].resetFields();
             },
             toLogin(){
-                this.$router.push("/Login");
+                this.$router.push("/login");
             },
             send(){
                 var vm = this;

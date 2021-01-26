@@ -1,24 +1,30 @@
 <template>
   <el-container>
-    <el-main>Main</el-main>
+    <el-main>
+      <router-view></router-view>
+    </el-main>
     <el-footer>
-      <el-row type="flex" class="row-bg">
-        <el-col :span="24">
-          <div @click="footer_clickIndex">
-            <i ref="footer_myIndex" class="icon iconfont" style="font-size:30px;text-align:center;color:skyblue">&#xe601;</i>
-          </div>
-        </el-col>
-        <el-col :span="24">
-          <div @click="footer_clickApp">
-            <i ref="footer_myApp" class="icon iconfont" style="font-size:30px;text-align:center;">&#xe602;</i>
-          </div>
-        </el-col>
-        <el-col :span="24">
-          <div  @click="footer_clickUser">
-            <i ref="footer_myUser" class="icon iconfont" style="font-size:30px;text-align:center;">&#xe63a;</i>
-          </div>
-        </el-col>
-      </el-row>
+      <el-menu>
+
+        <el-row type="flex" class="row-bg">
+          <el-col :span="24">
+            <div @click="footer_clickIndex">
+              <i ref="footer_myIndex" class="icon iconfont" style="font-size:30px;text-align:center;color:skyblue">&#xe601;</i>
+            </div>
+          </el-col>
+          <el-col :span="24">
+            <div @click="footer_clickApp">
+              <i ref="footer_myApp" class="icon iconfont" style="font-size:30px;text-align:center;">&#xe602;</i>
+            </div>
+          </el-col>
+          <el-col :span="24">
+            <div  @click="footer_clickUser">
+              <i ref="footer_myUser" class="icon iconfont" style="font-size:30px;text-align:center;">&#xe63a;</i>
+            </div>
+          </el-col>
+        </el-row>
+
+      </el-menu>
     </el-footer>
   </el-container>
 
@@ -34,7 +40,7 @@
                 footer_click_color:{
                     clicked: 'skyblue',
                     unClicked: ''
-                }
+                },
             }
         },
         methods:{
@@ -45,6 +51,7 @@
                 this.$refs.footer_myApp.style.color = this.footer_click_color.unClicked;
                 this.$refs.footer_myUser.style.color = this.footer_click_color.unClicked;
                 this.$refs.footer_myIndex.style.color = this.footer_click_color.clicked;
+                this.$router.push('/main/myIndex');
             },
             footer_clickApp(){
                 var vm = this;
@@ -52,6 +59,7 @@
                 this.$refs.footer_myIndex.style.color = this.footer_click_color.unClicked;
                 this.$refs.footer_myUser.style.color = this.footer_click_color.unClicked;
                 this.$refs.footer_myApp.style.color = this.footer_click_color.clicked;
+                this.$router.push('/main/myApp');
 
             },
             footer_clickUser(){
@@ -60,6 +68,7 @@
                 this.$refs.footer_myIndex.style.color = this.footer_click_color.unClicked;
                 this.$refs.footer_myApp.style.color = this.footer_click_color.unClicked;
                 this.$refs.footer_myUser.style.color = this.footer_click_color.clicked;
+                this.$router.push('/main/myUser');
             }
         }
     }

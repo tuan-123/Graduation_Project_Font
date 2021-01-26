@@ -104,7 +104,7 @@
                 this.$refs[formName].resetFields();
             },
             toRegister(){
-                this.$router.push("/Register");
+                this.$router.push("/register");
             }
         }
     }
