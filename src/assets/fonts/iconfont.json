@@ -1,0 +1,58 @@
+{
+  "id": "2348372",
+  "name": "VueTest",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "11099315",
+      "name": "用户",
+      "font_class": "yonghu1",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "12878975",
+      "name": "用户分组 应用",
+      "font_class": "app",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "17157440",
+      "name": "用户分组 应用",
+      "font_class": "app1",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "18672002",
+      "name": "首 页",
+      "font_class": "shouye",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "18908026",
+      "name": "首 页",
+      "font_class": "shouye1",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "4240569",
+      "name": "用户",
+      "font_class": "yonghu-copy",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "9978164",
+      "name": "用户",
+      "font_class": "yonghu",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    }
+  ]
+}
