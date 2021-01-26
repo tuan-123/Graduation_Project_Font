@@ -11,6 +11,14 @@ import MainMyApp from '../components/main/MyApp'
 //安装路由
 Vue.use(Router);
 
+//解决路由重复问题（报错），虽然对项目是为没有影响的
+//获取原型对象上的push函数
+const originalPush = Router.prototype.push
+//修改原型对象中的push方法
+Router.prototype.push = function (location) {
+  return originalPush.call(this,location).catch(err => err);
+};
+
 /**
 export default new Router({
   routes: [
