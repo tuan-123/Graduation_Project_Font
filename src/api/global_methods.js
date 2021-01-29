@@ -1,5 +1,7 @@
-exports.install = function (Vue,options) {
-  Vue.prototype.test = function () {
-    console.log(123);
-  };
-};
+export default {
+  install(Vue){
+    Vue.prototype.test = function(param){
+      console.log(param);
+    }
+  }
+}
