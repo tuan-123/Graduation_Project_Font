@@ -5,7 +5,7 @@
       更改名字
       <span class="btn">
         <!--<input type="button" value="保存"/>-->
-        <el-button type="success" @click="saveNickName">保&#9存</el-button>
+        <el-button type="success" @click="saveNickName">保存</el-button>
       </span>
     </div>
     <div class="main">
@@ -69,7 +69,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 35px;
+    font-size: 26px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -84,7 +84,7 @@
     position: relative;
     left: 25px;
     top: -10px;
-    font-size:60px;
+    font-size: 30px;
     width: 5px;
     float:left;
     margin-right: 55px;
@@ -92,29 +92,26 @@
   .header .btn{
     float: right;
     position: relative;
-    right: 25px;
     top: -10px;
+    padding-right: 10px;
   }
   .header .btn .el-button{
-    width: 120px;
-    height: 60px;
-    text-align: center;
-    font-size: 35px;
+    font-size: 17px;
   }
   .main /deep/ .el-input__inner{
     margin-top: 10%;
     background-color: #13ce66;
     margin-left: 5%;
     width: 90%;
-    height: 50px;
+    height: 40px;
     font-family: Heimi;
-    font-size: 30px;
+    font-size: 24px;
     border: 0;
     border-bottom: solid 5px red;
   }
   .main span{
     padding-left: 5%;
-    font-size: 25px;
+    font-size: 17px;
     color: chartreuse;
   }
 

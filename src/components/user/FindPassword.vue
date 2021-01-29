@@ -10,8 +10,8 @@
           <span>账&#9号</span>
           <span id="userName">{{userName}}</span>
         </div>
-        <div class="width70">
-          <span>新&#9密&#9码</span>
+        <div class="width50">
+          <span>新密码</span>
           <el-input
             v-model="newPassword"
             type="password"
@@ -23,7 +23,7 @@
             placeholder="填写新密码"
           ></el-input>
         </div>
-        <div class="width70">
+        <div class="width50">
           <span>确认密码</span>
           <el-input
             v-model="confirmPassword"
@@ -36,7 +36,7 @@
             placeholder="再次填写确认"
           ></el-input>
         </div>
-        <div class="width70">
+        <div class="width50">
           <span>邮&#9箱</span>
           <el-input
             v-model="email"
@@ -45,15 +45,15 @@
             placeholder="填写绑定的邮箱"
           ></el-input>
         </div>
-        <div class="width70" id="code">
-          <span>验&#9证&#9码</span>
+        <div class="width50" id="code">
+          <span>验证码</span>
           <el-input
             v-model="codeNum"
             @focus="codeFocus"
             @blur="codeBlur"
             minlength="6"
             maxlength="6"
-            placeholder="填写6位验证码"
+            placeholder="6位验证码"
             v-bind:disabled="canInput"
           ></el-input>
           <el-button type="success" @click="getCode" v-bind:disabled="canClick">{{content}}</el-button>
@@ -62,7 +62,7 @@
           <span>密码必须是6-12位</span>
         </div>
       </div>
-      <div>
+      <div class="btn">
         <el-button type="success" @click="findPassword">确&#9定</el-button>
       </div>
     </div>
@@ -70,6 +70,8 @@
 </template>
 
 <script>
+    import {Toast} from 'vant';
+    import {Dialog} from 'vant';
     var currentPasswordElement = document.getElementsByClassName("el-input");
     //正则校验邮箱规则
     //var emailRule = /^[A-Za-z\d]+[A-Za-z\d\-_\.]*@([A-Za-z\d]+[A-Za-z\d\-]*\\.)+[A-Za-z]{2,4}$/;
@@ -105,27 +107,6 @@
                     params: {
                         userName: this.userName
                     }
-                });
-            },
-            modifyPassword(){
-                this.$confirm('是否确认更改密码','提示',{
-                    confirmButtonText: '确认',
-                    cancelButtonText: '取消',
-                    type: 'warming'
-                }).then(_=>{
-                    if(this.newPassword.includes(' ')){
-                        this.$message.error('密码不能含有空格');
-                    }else{
-                        if(this.newPassword.length < 6 || this.confirmPassword.length < 6 ){
-                            this.$message.error('请检查密码长度');
-                        }else if(this.newPassword !== this.confirmPassword){
-                            this.$message.error('两次密码输入不一致');
-                        }else{
-                            //请求修改密码
-                        }
-                    }
-                }).catch(_=>{
-                    //取消
                 });
             },
             newPasswordFocus(){
@@ -176,21 +157,28 @@
                         }
                     },1000);
                 }else{
-                    this.$message.error("请输入正确的邮箱");
+                    Toast.fail("请输入正确的邮箱");
                 }
             },
             findPassword(){
                 if(!isNaN(this.codeNum) && !this.codeNum.includes(' ') && this.codeNum.length === 6){
-
                     if(this.newPassword.includes(' ') || this.newPassword.length < 6){
-                        this.$message.error("请检查密码格式");
+                        Toast.fail("请检查密码格式");
                     }else if(this.newPassword !== this.confirmPassword){
-                        this.$message.error("两次输入的密码不一致");
+                        Toast.fail("两次输入的密码不一致");
                     }else{
                         //发送请求
+                        Dialog.confirm({
+                            title: '提示',
+                            message: '是否更改密码'
+                        }).then(()=>{
+                            //确认
+                        }).catch(()=>{
+                            //取消
+                        });
                     }
                 }else{
-                    this.$message.error("验证码为6位数字");
+                    Toast.fail("验证码为6位数字");
                 }
             }
         }
@@ -209,7 +197,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 35px;
+    font-size: 26px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -219,13 +207,13 @@
     background-color: #3a8ee6;
     width: 100%;
     height: 92%;
-    font-size: 35px;
+    font-size: 22px;
   }
   .header .back{
     position: relative;
     left: 25px;
     top: -10px;
-    font-size:60px;
+    font-size: 30px;
     width: 5px;
     float:left;
     margin-right: 30px;
@@ -237,17 +225,17 @@
     margin-left: 35%;
     margin-top: 80px;
   }
-  .main div .width70{
+  .main div .width50{
     width: 90%;
-    height: 80px;
-    line-height: 70px;
+    height: 50px;
+    line-height: 50px;
+    margin-bottom: 5px;
   }
   .main .el-input{
-    width: 72%;
+    width: 70%;
     border: 0;
     border-bottom: solid 2px red;
     float: right;
-
   }
   .main .userName{
     width: 90%;
@@ -256,29 +244,40 @@
     margin-bottom: 20px;
   }
   .main :first-child div{
-    margin-left: 40px;
+    margin-left: 20px;
   }
   .main /deep/ .el-input__inner{
     background-color: #13ce66;
     border: 0;
-    height: 50px;
-    line-height: 50px;
-    font-size: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
   }
   #userName{
     padding-left: 30px;
   }
   #code .el-input{
-    width: 35%;
+    width: 33%;
     float: none;
   }
   #code .el-button{
-    width: 35%;
     float: right;
+    width: 38%;
+    height: auto;
     margin-left: 0;
     margin-top: 10px;
+    font-size: 20px;
+  }
+  .main .el-button{
+    margin-top: 30px;
+    height: auto;
+    font-size: 22px;
+  }
+  .main .btn{
+    width: 100%;
   }
   .tips{
+    font-size: 18px;
     margin-top: 25px;
   }
 </style>

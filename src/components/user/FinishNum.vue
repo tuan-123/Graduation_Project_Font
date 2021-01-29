@@ -14,7 +14,9 @@
         placeholder="请输入学号"
       ></el-input>
       <span id="tips">学号绑定后将无法修改</span>
-      <div><el-button type="success" @click="saveNum">绑&#9定</el-button></div>
+      <div class="btn">
+        <el-button type="success" @click="saveNum">绑&#9定</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -87,7 +89,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 35px;
+    font-size: 26px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -102,7 +104,7 @@
     position: relative;
     left: 25px;
     top: -10px;
-    font-size:60px;
+    font-size:30px;
     width: 5px;
     float:left;
     margin-right: 30px;
@@ -114,24 +116,25 @@
     width: 90%;
     height: 50px;
     font-family: Heimi;
-    font-size: 30px;
+    font-size: 20px;
     line-height: 50px;
     border: 0;
     border-bottom: solid 2px red;
   }
   .main #tips{
     padding-left: 5%;
-    font-size: 30px;
+    font-size: 20px;
     display: block;
     padding-top: 25px;
 
   }
   .main .el-button{
-    width: 30%;
-    height: 60px;
-    font-size: 36px;
-    margin-left: 35%;
-    margin-top: 80px;
+    font-size: 22px;
+  }
+  .main .btn{
+    margin-top: 50px;
+    width: 100%;
+    text-align: center;
   }
 </style>
 

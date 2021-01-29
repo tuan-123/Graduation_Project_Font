@@ -128,7 +128,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 35px;
+    font-size: 26px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -143,7 +143,7 @@
     position: relative;
     left: 25px;
     top: -10px;
-    font-size:60px;
+    font-size:30px;
     width: 5px;
     float:left;
   }
@@ -157,33 +157,33 @@
   }
   .main>div div{
     background-color: #9a6e3a;
-    height: 90px;
-    line-height: 90px;
-    font-size: 30px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
     border-bottom: solid 1px #13ce66;
   }
   .main>div .img{
-    height: 150px;
-    line-height: 150px;
+    height: 100px;
+    line-height: 100px;
   }
   .main>div .img .elAvatar{
     display: block;
     float: right;
-    margin-top: 10px;
+    margin-top: 5px;
   }
   .main>div div .floatRight{
     float: right;
   }
   .avatar {
-    width: 130px;
-    height: 130px;
+    width: 90px;
+    height: 90px;
     float: right;
   }
   .img span>div{
     display: block;
     float: right;
-    width: 130px;
-    height: 130px;
+    width: 90px;
+    height: 90px;
     border: 0;
   }
 

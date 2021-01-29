@@ -5,21 +5,20 @@
     </el-main>
     <el-footer>
       <el-menu>
-
         <el-row type="flex" class="row-bg">
           <el-col :span="24">
             <div @click="footer_clickIndex">
-              <i class="icon iconfont" style="font-size:30px;text-align:center;" :style="{color:indexColor}">&#xe601;</i>
+              <i class="icon iconfont" style="text-align:center;" :style="{color:indexColor}">&#xe601;</i>
             </div>
           </el-col>
           <el-col :span="24">
             <div @click="footer_clickApp">
-              <i class="icon iconfont" style="font-size:30px;text-align:center;" :style="{color:appColor}">&#xe602;</i>
+              <i class="icon iconfont" style="text-align:center;" :style="{color:appColor}">&#xe602;</i>
             </div>
           </el-col>
           <el-col :span="24">
             <div  @click="footer_clickUser">
-              <i class="icon iconfont" style="font-size:30px;text-align:center;" :style="{color:userColor}">&#xe63a;</i>
+              <i class="icon iconfont" style="text-align:center;" :style="{color:userColor}">&#xe63a;</i>
             </div>
           </el-col>
         </el-row>
@@ -90,7 +89,6 @@
 <style scoped>
   .el-container{
     height: 100%;
-
     overflow-x: hidden;
     overflow-y: hidden;
   }
@@ -100,18 +98,22 @@
     color: #333;
     padding: 0 0 0 0;
   }
-
   .el-footer {
     /*background-color: #B3C0D1;*/
     color: #333;
     text-align: center;
-    line-height: 130px;
+    line-height: 60px;
     padding: 0 0 0 0;
   }
-
   .row-bg{
     height: 100%;
     width: 100%;
+  }
+  .row-bg div div i{
+    display: block;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
   }
 
 </style>

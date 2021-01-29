@@ -7,11 +7,11 @@
     <div class="main">
       <div>
         <div class="userName">
-          <span>账&#9号</span>
+          <span>账号</span>
           <span id="userName">{{userName}}</span>
         </div>
-        <div class="width70">
-          <span>原&#9密&#9码</span>
+        <div class="width50">
+          <span>原密码</span>
           <el-input
             v-model="currentPassword"
             type="password"
@@ -23,8 +23,8 @@
             placeholder="填写原密码"
           ></el-input>
         </div>
-        <div class="width70">
-          <span>新&#9密&#9码</span>
+        <div class="width50">
+          <span>新密码</span>
           <el-input
             v-model="newPassword"
             type="password"
@@ -36,7 +36,7 @@
             placeholder="填写新密码"
           ></el-input>
         </div>
-        <div class="width70">
+        <div class="width50">
           <span>确认密码</span>
           <el-input
             v-model="confirmPassword"
@@ -54,7 +54,7 @@
           <span id="forgottenPassword" @click="findPassword">忘记密码?</span>
         </div>
       </div>
-      <div>
+      <div class="btn">
         <el-button type="success" @click="modifyPassword">更&#9改</el-button>
       </div>
     </div>
@@ -62,6 +62,9 @@
 </template>
 
 <script>
+    import {Dialog} from 'vant';
+    import {Toast} from 'vant';
+
     var currentPasswordElement = document.getElementsByClassName("el-input");
   export default {
       name: 'ModifyPassword',
@@ -91,13 +94,34 @@
               });
           },
           modifyPassword(){
-              this.$confirm('是否确认更改密码','提示',{
+              Dialog.confirm({
+                  title: '提示',
+                  message: "是否确认更改密码"
+              }).then(()=>{
+                  //确定
+                  if(this.currentPassword.includes(' ') || this.newPassword.includes(' ')){
+                      //this.$message.error('密码不能含有空格');
+                      Toast.fail("密码不能含有空格");
+                  }else{
+                      if(this.currentPassword.length < 6 || this.newPassword.length < 6 || this.confirmPassword.length < 6 ){
+                          Toast.fail('请检查密码长度');
+                      }else if(this.newPassword !== this.confirmPassword){
+                          Toast.fail('两次密码输入不一致');
+                      }else{
+                          //请求修改密码
+                      }
+                  }
+              }).catch(()=>{
+                 //取消
+              });
+              /*this.$confirm('是否确认更改密码','提示',{
                   confirmButtonText: '确认',
                   cancelButtonText: '取消',
                   type: 'warming'
               }).then(_=>{
                   if(this.currentPassword.includes(' ') || this.newPassword.includes(' ')){
-                      this.$message.error('密码不能含有空格');
+                      //this.$message.error('密码不能含有空格');
+                      Toast.fail("密码不能含有空格");
                   }else{
                       if(this.currentPassword.length < 6 || this.newPassword.length < 6 || this.confirmPassword.length < 6 ){
                           this.$message.error('请检查密码长度');
@@ -109,7 +133,7 @@
                   }
               }).catch(_=>{
                   //取消
-              });
+              });*/
           },
           currentPasswordFocus(){
               //console.log(currentPasswordElement);
@@ -156,7 +180,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 35px;
+    font-size: 26px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -166,31 +190,33 @@
     background-color: #3a8ee6;
     width: 100%;
     height: 92%;
-    font-size: 35px;
+    font-size: 22px;
   }
   .header .back{
     position: relative;
     left: 25px;
     top: -10px;
-    font-size:60px;
+    font-size:30px;
     width: 5px;
     float:left;
     margin-right: 30px;
   }
   .main .el-button{
-    width: 30%;
-    height: 60px;
-    font-size: 36px;
-    margin-left: 35%;
-    margin-top: 80px;
+    font-size: 22px;
   }
-  .main div .width70{
+  .main .btn{
+    margin-top: 30px;
+    width: 100%;
+    text-align: center;
+  }
+  .main div .width50{
     width: 90%;
-    height: 80px;
-    line-height: 70px;
+    height: 50px;
+    line-height: 50px;
+    margin-bottom: 5px;
   }
   .main .el-input{
-    width: 72%;
+    width: 70%;
     border: 0;
     border-bottom: solid 2px red;
     float: right;
@@ -203,14 +229,14 @@
     margin-bottom: 20px;
   }
   .main :first-child div{
-    margin-left: 40px;
+    margin-left: 20px;
   }
   .main /deep/ .el-input__inner{
     background-color: #13ce66;
     border: 0;
-    height: 50px;
-    line-height: 50px;
-    font-size: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 20px;
   }
   #forgottenPassword {
     color: blue;
@@ -221,6 +247,7 @@
     padding-left: 30px;
   }
   .tips{
+    font-size: 18px;
     margin-top: 25px;
   }
 </style>

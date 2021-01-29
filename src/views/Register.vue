@@ -4,7 +4,7 @@
       <!--注册表单区域-->
       <el-form ref="form" :model="form" :rules="rules" class="register_form" label-position="left">
 
-        <h3 align="center" style="padding-bottom: 20px; font-size:27px">注册页面</h3>
+        <span align="center" class="title">注册页面</span>
         <el-form-item prop="name" >
           <el-input nprefix-ico="iconfont icon-user" v-model="form.name" placeholder="请输入手机号码"></el-input>
         </el-form-item>
@@ -35,7 +35,7 @@
         </el-form-item>
         <div class="toLogin" style="font-size: 20px">
           已有账号，
-          <el-link type="primary" @click="toLogin()" style="font-size:17px">去登录</el-link>
+          <el-link type="primary" @click="toLogin()" style="font-size:20px">去登录</el-link>
         </div>
 
       </el-form>
@@ -170,6 +170,15 @@
 </script>
 
 <style scoped>
+  .title{
+    display: block;
+    height: 40px;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    font-size:24px
+  }
   .register_container{
     background: url("../assets/img/registerBackgroundImg.jpg");
     background-repeat: no-repeat;
@@ -177,23 +186,20 @@
     height: 100%;
   }
   .register_box{
-    width: 500px;
-    height: 1200px;
+    width:70%;
+    height: 100%;
     border-radius: 20px;
-    position: absolute;
-    left: 50%;
-    top:50%;
-    transform: translate(-50%,-50%);
+    position: relative;
+    padding-left: 15%;
+
   }
   .register_container .register_form .btns{
     display: flex;
     justify-content: flex-end;
   }
   .register_form{
-    position: absolute;
-    top: 5%;
+    position: relative;
     width: 100%;
-    padding: 0 40px;
     box-sizing: border-box;
   }
   .toLogin{
@@ -203,22 +209,20 @@
   }
 
   /deep/ .el-input__inner{
-    margin-top: 10px;
+
     background: rgba(0,255,255,0.5);
-    font-size: 25px;
-    height: 67px;
   }
 
-  .btns .el-button{
+  /*.btns .el-button{
     font-size: 35px;
     width: 120px;
     height: 80px;
-  }
+  }*/
 
-  .sendCode .el-button{
+  /*.sendCode .el-button{
     font-size: 35px;
     width: 220px;
     height: 80px;
-  }
+  }*/
 
 </style>

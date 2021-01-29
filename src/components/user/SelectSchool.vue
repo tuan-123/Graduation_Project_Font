@@ -11,13 +11,17 @@
         :props="{ expandTrigger: 'hover' }"
         @change="handleChange"></el-cascader>
       <span id="tips">学校绑定后将无法修改</span>
-      <div><el-button type="success" @click="saveNum">绑&#9定</el-button></div>
+      <div class="btn">
+        <el-button type="success" @click="saveNum">绑&#9定</el-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  var confirmText=['您要绑定的学校是:',''];
+  //var confirmText=['您要绑定的学校是:',''];
+  import {Toast} from 'vant';
+  import {Dialog} from 'vant';
     export default {
         name: "SelectSchool",
         data(){
@@ -79,7 +83,7 @@
             saveNum(){
                 //发送请求
                 if(this.value === -1) {
-                    this.$message.error("先选择学校嘿");
+                    Toast.fail("先选择学校嘿");
                 }else{
                     //confirm
                     //console.log(this.value);
@@ -88,16 +92,18 @@
                     var children = (this.options.find(item=>item.value===this.value[0])).children;
                     var schoolName = (children.find(item=>item.value===this.value[1])).label;
 
+                    /*
                     //组装数据，为了$confirm 的message可以换行
                     confirmText[1] = schoolName;
                     var newDatas=[];
                     var h = this.$createElement;
                     for(var i in confirmText){
                         newDatas.push(h('p',null,confirmText[i]));
-                    }
+                    }*/
 
                     //console.log(schoolName);
                     //确认信息
+                    /*
                     this.$confirm(h('div',null,newDatas),'提示',{
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
@@ -107,6 +113,17 @@
                     }).catch(_=>{
                         //取消
                     })
+                    */
+                    Dialog.confirm({
+                        title: '提示',
+                        message:'您要绑定的学校为:\n' + schoolName
+                    }).then(()=>{
+                        //确定
+                        console.log(schoolName);
+                    }).catch(()=>{
+                       //取消
+                    });
+
                 }
                 //回跳页面
             },
@@ -131,7 +148,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 35px;
+    font-size: 26px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -146,14 +163,14 @@
     position: relative;
     left: 25px;
     top: -10px;
-    font-size:60px;
+    font-size:30px;
     width: 5px;
     float:left;
     margin-right: 30px;
   }
   .main #tips{
     padding-left: 15%;
-    font-size: 30px;
+    font-size: 20px;
     display: block;
     padding-top: 25px;
 
@@ -161,14 +178,15 @@
   .main .el-cascader{
     margin-top: 15%;
     width: 70%;
-    margin-left: 10%;
+    margin-left: 15%;
   }
   .main .el-button{
-    width: 30%;
-    height: 60px;
-    font-size: 36px;
-    margin-left: 35%;
-    margin-top: 80px;
+    font-size: 22px;
+  }
+  .main .btn{
+    margin-top: 50px;
+    width: 100%;
+    text-align: center;
   }
 </style>
 

@@ -38,6 +38,7 @@
 </template>
 
 <script>
+  import {Toast} from 'vant';
     export default {
         name: "Login",
         data() {
@@ -91,11 +92,13 @@
                                     vm.$router.push("/admin/index");//进入管理员界面
                             }else if(response.data.code == 1001){
                                 //alert(response.data.msg);;
-                                vm.$message.error(response.data.msg);
+                                //vm.$message.error(response.data.msg);
+                                Toast.fail(response.data.msg);
                             }
                         })
                     } else {
-                        this.$message.error("用户名或密码格式不正确");
+                        //this.$message.error("用户名或密码格式不正确");
+                        Toast.fail("用户名或密码格式不正确");
                         return false;
                     }
                 });
@@ -112,8 +115,8 @@
 
 <style scoped>
   .login_box{
-    width: 550px;
-    height: 550px;
+    width: 250px;
+    height: 350px;
     background-color: rgba(0,0,0,0);
     position: absolute;
     left: 50%;
@@ -121,8 +124,8 @@
     transform: translate(-50%,-50%);
   }
   .login_box .avater_box {
-    height:250px;
-    width: 250px;
+    height:100px;
+    width: 100px;
     border: 1px solid #eee;
     border-radius: 50%;
     padding: 10px;
@@ -154,26 +157,24 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    padding: 0 40px;
+    padding: 0 20px;
     box-sizing: border-box;
   }
   .toRegister{
     display: flex;
     justify-content: flex-end;
-    font-size: 35px;
+    font-size: 16px;
     margin-bottom: 5px;
   }
 
   /deep/ .el-input__inner{
-    background: rgba(0,255,255,0.5);
-    font-size: 25px;
-    height: 67px;
+    background: rgba(255,255,255,0.5);
   }
 
-  .el-button{
+  /*.el-button{
     font-size: 35px;
     width: 120px;
     height: 80px;
-  }
+  }*/
 
 </style>

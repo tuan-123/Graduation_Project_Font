@@ -103,7 +103,7 @@
     /*background-color: brown;*/
     float:left;
     height: 100%;
-    width: 40%;
+    width: 35%;
   }
   .myUserHeader .img .el-avatar{
     display: block;
@@ -115,23 +115,23 @@
     /*background-color: skyblue;*/
     float:right;
     height: 100%;
-    width: 60%;
+    width: 65%;
   }
   .myUserHeader .content .nickName{
-    font-size: 45px;
+    font-size: 30px;
     font-family: SimHei;
-    padding-top: 60px;
+    padding-top: 30px;
   }
 
   .myUserHeader .content .more{
-    font-size: 50px;
+    font-size: 40px;
     float: right;
     padding-top: 10%;
-    padding-right: 10%;
+    padding-right: 5%;
   }
   .myUserHeader .content .userName{
-    padding-top: 20px;
-    font-size: 27px;
+    padding-top: 10px;
+    font-size: 20px;
     width: 100%;
   }
   .myUserBody{
@@ -141,18 +141,18 @@
   }
   .myUserBody>div{
     width: 95%;
-    height: 100px;
-    line-height: 100px;
-    font-size: 35px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
     padding-left: 5%;
     background-color: white;
   }
   .myUserBody div span i{
-    font-size: 37px;
+    font-size: 25px;
   }
   .myUserBody #password{
     background-color: #13ce66; /*得跟大背景颜色一样*/
-    height: 120px;
+    height: 70px;
     margin-bottom: 20px;
     padding-left: 0;
     width: 100%;
@@ -161,7 +161,7 @@
     position: relative;
     top: 20px;
     background-color: skyblue;
-    height: 100px;
+    height: 50px;
     padding-left: 5%;
   }
   .mySomeThings{
@@ -174,7 +174,7 @@
     border-bottom: 0;
   }
   .toSomeThings{
-    font-size: 41px;
+    font-size: 25px;
     float: right;
   }
 

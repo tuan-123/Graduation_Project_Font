@@ -18,13 +18,23 @@ import 'lib-flexible'
 //导入自定义全局函数模块
 import GlobalMethods from './api/global_methods'
 
+//使用Vant-ui 按需导入
+import Toast from "vant/lib/toast"
+import 'vant/lib/style/base.css'
+import 'vant/lib/toast/style'
+import Dialog from "vant/lib/dialog"
+import 'vant/lib/dialog/style'
+import Notify from "vant/lib/notify"
+import 'vant/lib/notify/style'
+
+
+
 
 
 
 Vue.use(VueRouter);
 Vue.use(ElementUI);
 Vue.use(GlobalMethods);
-
 
 Vue.config.productionTip = false;
 
