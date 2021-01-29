@@ -7,6 +7,15 @@ import Index from '../views/Index'
 import MainMyUser from '../components/main/MyUser'
 import MainMyIndex from '../components/main/MyIndex'
 import MainMyApp from '../components/main/MyApp'
+import UserDetail from '../components/user/MyDetail'
+import UserUpdateNickName from '../components/user/UpdateNickName'
+import UserFinishSchool from '../components/user/SelectSchool'
+import UserFinishNum from '../components/user/FinishNum'
+import UserModifyPassword from '../components/user/ModifyPassword'
+import UserFindPassword from '../components/user/FindPassword'
+
+
+
 
 //安装路由
 Vue.use(Router);
@@ -70,10 +79,38 @@ const router = new Router({
         },
         {
           path: '/main/myUser',
+          name: 'MainMyUser',
           component: MainMyUser
         }
       ]
     },
+    {
+      path:'/user/myDetail',
+      component: UserDetail
+    },
+    {
+      path: '/user/updateNickName',
+      name: 'UserUpdateNickName',
+      component: UserUpdateNickName
+    },
+    {
+      path: '/user/finishSchool',
+      component: UserFinishSchool
+    },
+    {
+      path: '/user/finishNum',
+      component: UserFinishNum
+    },
+    {
+      path: '/user/modifyPassword',
+      name: 'UserModifyPassword',
+      component: UserModifyPassword
+    },
+    {
+      path: '/user/findPassword',
+      name: 'UserFindPassword',
+      component: UserFindPassword
+    }
   ]
 });
 
