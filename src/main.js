@@ -15,11 +15,15 @@ import './assets/css/global.css'
 import './assets/fonts/iconfont.css'
 //导入flexible
 import 'lib-flexible'
+//导入自定义全局函数模块
+import GlobalMethods from './api/global_methods'
+
 
 
 
 Vue.use(VueRouter);
 Vue.use(ElementUI);
+Vue.use(GlobalMethods);
 
 
 Vue.config.productionTip = false;
