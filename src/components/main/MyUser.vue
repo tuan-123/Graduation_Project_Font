@@ -143,8 +143,8 @@
   }
   .myUserBody>div{
     width: 95%;
-    height: 80px;
-    line-height: 80px;
+    height: 100px;
+    line-height: 100px;
     font-size: 35px;
     padding-left: 5%;
     background-color: white;
@@ -154,7 +154,7 @@
   }
   .myUserBody #password{
     background-color: #13ce66; /*得跟大背景颜色一样*/
-    height: 100px;
+    height: 120px;
     margin-bottom: 20px;
     padding-left: 0;
     width: 100%;
@@ -163,7 +163,7 @@
     position: relative;
     top: 20px;
     background-color: skyblue;
-    height: 80px;
+    height: 100px;
     padding-left: 5%;
   }
   .mySomeThings{

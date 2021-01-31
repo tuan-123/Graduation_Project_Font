@@ -120,7 +120,7 @@
     width: 80%;
     height: 50%;
     background-color: rgba(0,0,0,0);
-    position: absolute;
+    position: relative;
     left: 50%;
     top:50%;
     transform: translate(-50%,-50%);
@@ -132,7 +132,7 @@
     border-radius: 50%;
     padding: 10px;
     box-shadow: 0 0 10px #ddd;
-    position: absolute;
+    position: relative;
     left: 50%;
     transform: translate(-50%,-50%);
     background-color: #fff;
@@ -157,6 +157,7 @@
   }
   .login_container .login_form{
     position: absolute;
+    height: 70%;
     bottom: 0;
     width: 100%;
     padding: 0 20px;

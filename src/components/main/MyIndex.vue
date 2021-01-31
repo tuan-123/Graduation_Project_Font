@@ -1,10 +1,18 @@
 <template>
-  <div>Index</div>
+  <div>{{test}}</div>
 </template>
 
 <script>
     export default {
-        name: "MyIndex"
+        name: "MyIndex",
+        data(){
+            return{
+                test: ''
+            }
+        },
+        created() {
+            this.test = window.sessionStorage.getItem('token');
+        }
     }
 </script>
 
