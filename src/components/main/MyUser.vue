@@ -2,10 +2,14 @@
   <div style="height: 100%">
     <div class="myUserHeader">
       <div class="img">
-        <el-avatar
-          :size="100"
-          :src="userHeaderImg">
-        </el-avatar>
+        <van-image
+          round
+          width="2.5rem"
+          height="2.5rem"
+          :src="userHeaderImg"
+        >
+          <template v-slot:error>加载失败</template>
+        </van-image>
 
       </div>
       <div class="content">
@@ -24,7 +28,7 @@
           <i class="icon iconfont" style="color:#1296db;">&#xe604;</i>
         </span>
           <span id="passwordText" class="mySomeThings noBottomBorder">
-            修改密码
+            密&#9码
             <span class="toSomeThings" @click="toModifyPassword"> > </span>
           </span>
         </div>
@@ -34,7 +38,7 @@
           <i class="icon iconfont" style="color:#1afa29;">&#xe605;</i>
         </span>
         <span class="mySomeThings">
-          我的闲置
+          闲&#9置
           <span class="toSomeThings"> > </span>
         </span>
 
@@ -44,7 +48,7 @@
           <i class="icon iconfont" style="color:#1296db">&#xe609;</i>
         </span>
         <span class="mySomeThings">
-          我的提问
+          提&#9问
           <span class="toSomeThings"> > </span>
         </span>
       </div>
@@ -53,7 +57,7 @@
           <i class="icon iconfont" style="color:#f3ca7e">&#xe606;</i>
         </span>
         <span class="mySomeThings noBottomBorder">
-          我的收藏
+          收&#9藏
           <span class="toSomeThings"> > </span>
         </span>
       </div>
@@ -103,13 +107,11 @@
     /*background-color: brown;*/
     float:left;
     height: 100%;
-    width: 35%;
-  }
-  .myUserHeader .img .el-avatar{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
+    /*高度100%时的垂直居中*/
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    margin-left: 5%;
   }
   .myUserHeader .content{
     /*background-color: skyblue;*/
@@ -118,20 +120,20 @@
     width: 65%;
   }
   .myUserHeader .content .nickName{
-    font-size: 30px;
+    font-size: 45px;
     font-family: SimHei;
-    padding-top: 30px;
+    padding-top: 15%
   }
 
   .myUserHeader .content .more{
-    font-size: 40px;
+    font-size: 50px;
     float: right;
-    padding-top: 10%;
-    padding-right: 5%;
+    padding-top: 5%;
+    padding-right: 10%;
   }
   .myUserHeader .content .userName{
     padding-top: 10px;
-    font-size: 20px;
+    font-size: 30px;
     width: 100%;
   }
   .myUserBody{
@@ -141,18 +143,18 @@
   }
   .myUserBody>div{
     width: 95%;
-    height: 50px;
-    line-height: 50px;
-    font-size: 20px;
+    height: 80px;
+    line-height: 80px;
+    font-size: 35px;
     padding-left: 5%;
     background-color: white;
   }
   .myUserBody div span i{
-    font-size: 25px;
+    font-size: 40px;
   }
   .myUserBody #password{
     background-color: #13ce66; /*得跟大背景颜色一样*/
-    height: 70px;
+    height: 100px;
     margin-bottom: 20px;
     padding-left: 0;
     width: 100%;
@@ -161,12 +163,12 @@
     position: relative;
     top: 20px;
     background-color: skyblue;
-    height: 50px;
+    height: 80px;
     padding-left: 5%;
   }
   .mySomeThings{
     display: inline-block;
-    width: 85%;
+    width: 80%;
     margin-left: 4%;
     border-bottom: solid 1px red;
   }
@@ -174,7 +176,7 @@
     border-bottom: 0;
   }
   .toSomeThings{
-    font-size: 25px;
+    font-size: 35px;
     float: right;
   }
 

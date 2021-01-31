@@ -5,17 +5,30 @@
       绑定学号
     </div>
     <div class="main">
-      <el-input
+      <!--<el-input
         @focus="focusMethod"
         @blur="blurMethod"
         type="text"
         :disabled="false"
         v-model="num"
         placeholder="请输入学号"
-      ></el-input>
+      ></el-input>-->
+      <div class="numInput">
+        <van-cell-group>
+          <van-field
+            v-model="num"
+            placeholder="请输入学号"
+            type="digit"
+            @focus="focusMethod"
+            @blur="blurMethod"
+            @border="false"
+          />
+        </van-cell-group>
+      </div>
       <span id="tips">学号绑定后将无法修改</span>
       <div class="btn">
-        <el-button type="success" @click="saveNum">绑&#9定</el-button>
+        <!--<el-button type="success" @click="saveNum">绑&#9定</el-button>-->
+        <van-button type="primary" text="绑定" @click="saveNum"/>
       </div>
     </div>
   </div>
@@ -23,6 +36,8 @@
 
 <script>
 
+    import {Toast} from 'vant';
+    import {Dialog} from 'vant';
     var confirmText = ['您要绑定的学号是: ',''];
     export default {
         name: "finishNum",
@@ -38,9 +53,9 @@
             saveNum(){
                 //发送请求
                 if(this.num === '') {
-                    this.$message.error("先输入学号嘿");
+                    Toast.fail("先输入学号嘿");
                 }else{
-                    if(isNaN(this.num)){
+                    /*if(isNaN(this.num)){
                         this.$message.error("请输入正确的学号啦");
                     }else{
                         //去除前后空格
@@ -63,16 +78,26 @@
                         }).catch(_=>{
                             //取消
                         })
-                    }
+                    }*/
+                    Dialog.confirm({
+                        title:'提示',
+                        message: '您要绑定的学号为\n' + this.num
+                    }).then(()=>{
+                       //确认
+                       //console.log(this.num);
+                    }).catch(()=>{
+                        //取消
+                    });
+
                 }
                 //回跳页面
             },
             focusMethod(){
-                let inp = document.getElementsByClassName("el-input__inner")[0];
+                let inp = document.getElementsByClassName("numInput")[0];
                 inp.style.borderBottomColor = "#FFFFFF";
             },
             blurMethod(){
-                let inp = document.getElementsByClassName("el-input__inner")[0];
+                let inp = document.getElementsByClassName("numInput")[0];
                 inp.style.borderBottomColor = "red";
             }
         }
@@ -89,7 +114,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 26px;
+    font-size: 40px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -104,12 +129,11 @@
     position: relative;
     left: 25px;
     top: -10px;
-    font-size:30px;
+    font-size:50px;
     width: 5px;
     float:left;
-    margin-right: 30px;
   }
-  .main /deep/ .el-input__inner{
+  /*.main /deep/ .el-input__inner{
     margin-top: 20%;
     background-color: #13ce66;
     margin-left: 5%;
@@ -120,21 +144,33 @@
     line-height: 50px;
     border: 0;
     border-bottom: solid 2px red;
-  }
+  }*/
   .main #tips{
-    padding-left: 5%;
-    font-size: 20px;
+    padding-left: 10%;
+    font-size: 30px;
     display: block;
-    padding-top: 25px;
+    padding-top: 5px;
 
   }
-  .main .el-button{
+  /*.main .el-button{
     font-size: 22px;
-  }
-  .main .btn{
+  }*/
+  /*.main .btn{
     margin-top: 50px;
     width: 100%;
     text-align: center;
+  }*/
+  .main .btn{
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-top: 15%;
+  }
+  .main .numInput{
+    border-bottom: solid 2px red;
+    width: 80%;
+    margin-left: 10%;
+    padding-top: 10%;
   }
 </style>
 

@@ -5,14 +5,35 @@
       绑定学校
     </div>
     <div class="main">
-      <el-cascader
+      <!--<el-cascader
         v-model="value"
         :options="options"
         :props="{ expandTrigger: 'hover' }"
-        @change="handleChange"></el-cascader>
+        @change="handleChange"></el-cascader>-->
+      <div class="schoolSelect">
+        <van-field
+          v-model="fieldValue"
+          is-link
+          readonly
+          placeholder="请选择所在学校"
+          @click="show = true"
+        />
+        <van-popup v-model="show" round position="bottom">
+          <van-cascader
+            v-model="value"
+            title="请选择学校"
+            :options="options"
+            @close="show=false"
+            @finish="onFinish"
+          />
+        </van-popup>
+      </div>
       <span id="tips">学校绑定后将无法修改</span>
-      <div class="btn">
+      <!--<div class="btn">
         <el-button type="success" @click="saveNum">绑&#9定</el-button>
+      </div>-->
+      <div class="saveBtn">
+        <van-button type="primary" text="绑定" @click="saveSchool"/>
       </div>
     </div>
   </div>
@@ -27,48 +48,50 @@
         data(){
             return{
                 value:-1,
+                show: false,
+                fieldValue: '',
                 options:[
                     {
                         value: 2,
-                        label:"广东",
+                        text:"广东",
                         children:[
                             {
                                 value: 45,
-                                label:"电子科技大学中山学院"
+                                text:"电子科技大学中山学院"
                             },
                             {
                                 value: 46,
-                                label: "中山大学"
+                                text: "中山大学"
                             },
                             {
                                 value: 47,
-                                label:"电子科技大学"
+                                text:"电子科技大学"
                             },
                             {
                                 value: 48,
-                                label: "背景大学"
+                                text: "背景大学"
                             }
                         ]
                     },
                     {
                         value: 3,
-                        label:"上海",
+                        text:"上海",
                         children:[
                             {
                                 value: 51,
-                                label:"科技大学中山学院"
+                                text:"科技大学中山学院"
                             },
                             {
                                 value: 52,
-                                label: "大学"
+                                text: "大学"
                             },
                             {
                                 value: 53,
-                                label:"电子科技大学"
+                                text:"电子科技大学"
                             },
                             {
                                 value: 54,
-                                label: "背景大学"
+                                text: "背景大学"
                             }
                         ]
                     }
@@ -80,59 +103,24 @@
             toBack(){
                 this.$router.push("/user/myDetail");
             },
-            saveNum(){
-                //发送请求
-                if(this.value === -1) {
-                    Toast.fail("先选择学校嘿");
+            onFinish({ selectedOptions }){
+                this.show = false;
+                this.fieldValue = selectedOptions.map((option) => option.text).join('/');
+            },
+            saveSchool(){
+                if(this.value === -1){
+                    Toast.fail('请选择学校');
                 }else{
-                    //confirm
-                    //console.log(this.value);
-                    //console.log(this.options.find(item=>item.value===this.value[0]))
-                    //获取级联选择器的label值
-                    var children = (this.options.find(item=>item.value===this.value[0])).children;
-                    var schoolName = (children.find(item=>item.value===this.value[1])).label;
-
-                    /*
-                    //组装数据，为了$confirm 的message可以换行
-                    confirmText[1] = schoolName;
-                    var newDatas=[];
-                    var h = this.$createElement;
-                    for(var i in confirmText){
-                        newDatas.push(h('p',null,confirmText[i]));
-                    }*/
-
-                    //console.log(schoolName);
-                    //确认信息
-                    /*
-                    this.$confirm(h('div',null,newDatas),'提示',{
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warming'
-                    }).then(_=>{
-                        //确定
-                    }).catch(_=>{
-                        //取消
-                    })
-                    */
                     Dialog.confirm({
-                        title: '提示',
-                        message:'您要绑定的学校为:\n' + schoolName
+                        titile: '提示',
+                        message: '您所绑定的学校为:\n' + this.fieldValue
                     }).then(()=>{
-                        //确定
-                        console.log(schoolName);
+                       // 确定
+                       console.log(this.value);
                     }).catch(()=>{
-                       //取消
+                        //取消
                     });
-
                 }
-                //回跳页面
-            },
-            focusMethod(){
-                var inp = document.getElementsByClassName("el-input__inner")[0];
-                inp.style.borderBottomColor = "#FFFFFF";
-            },
-            handleChange(event){
-                //console.log(event);
             }
         }
     }
@@ -148,7 +136,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 26px;
+    font-size: 40px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -163,30 +151,41 @@
     position: relative;
     left: 25px;
     top: -10px;
-    font-size:30px;
+    font-size:50px;
     width: 5px;
     float:left;
     margin-right: 30px;
   }
   .main #tips{
-    padding-left: 15%;
-    font-size: 20px;
+    padding-left: 10%;
+    font-size: 30px;
     display: block;
     padding-top: 25px;
 
   }
-  .main .el-cascader{
+  /*.main .el-cascader{
     margin-top: 15%;
     width: 70%;
     margin-left: 15%;
-  }
-  .main .el-button{
+  }*/
+  /*.main .el-button{
     font-size: 22px;
-  }
-  .main .btn{
+  }*/
+  /*.main .btn{
     margin-top: 50px;
     width: 100%;
     text-align: center;
+  }*/
+  .main .saveBtn{
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-top: 10%;
+  }
+  .main .schoolSelect{
+    width: 80%;
+    margin-left: 10%;
+    padding-top: 10%;
   }
 </style>
 

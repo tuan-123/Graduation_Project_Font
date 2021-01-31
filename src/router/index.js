@@ -45,7 +45,7 @@ const router = new Router({
 
     {
       path: '/',
-      redirect: '/index',
+      redirect: '/login',
     },
 
     {
@@ -110,7 +110,7 @@ const router = new Router({
       path: '/user/findPassword',
       name: 'UserFindPassword',
       component: UserFindPassword
-    }
+    },
   ]
 });
 

@@ -10,11 +10,25 @@
         <div class="img">
           <span>头&#9像</span>
           <span class="elAvatar">
-            <el-upload
+            <!--<el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false">
               <img src="http://localhost:8087/userImg/defaultImg.jpg" class="avatar">
-            </el-upload>
+            </el-upload>-->
+            <van-uploader
+              preview-size="60px"
+              :max-count="1"
+              accept="image/*"
+              :after-read="afterRead"
+              :preview-image="false"
+              :show-upload="true"
+            >
+              <van-image
+                width="60px"
+                height="60px"
+                :src="userImg"
+              />
+            </van-uploader>
           </span>
         </div>
         <div>
@@ -65,13 +79,11 @@
                 num:'-1',
                 numColor:'#808A87',
                 toFinishNum: true,
-
+                userImg: GLOBAL.httpBaseUrl + "/userImg/defaultImg.jpg"
             }
         },
         created(){
             //发送数据请求
-
-
             if(this.schoolName === '-1'){
                 this.schoolName = "未绑定";
                 this.schoolNameColor = '#808A87';
@@ -113,6 +125,9 @@
             },
             finishNum(){
                 this.$router.push("/user/finishNum");
+            },
+            afterRead(file){
+                console.log(file);
             }
         }
     }
@@ -128,7 +143,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 26px;
+    font-size: 40px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -143,7 +158,7 @@
     position: relative;
     left: 25px;
     top: -10px;
-    font-size:30px;
+    font-size: 50px;
     width: 5px;
     float:left;
   }
@@ -157,19 +172,20 @@
   }
   .main>div div{
     background-color: #9a6e3a;
-    height: 50px;
-    line-height: 50px;
-    font-size: 20px;
+    height: 100px;
+    line-height: 100px;
+    font-size: 35px;
     border-bottom: solid 1px #13ce66;
   }
   .main>div .img{
-    height: 100px;
-    line-height: 100px;
+    height: 150px;
+    line-height: 150px;
+    padding-right: 5%;
   }
   .main>div .img .elAvatar{
     display: block;
     float: right;
-    margin-top: 5px;
+    margin-top: 15px;
   }
   .main>div div .floatRight{
     float: right;

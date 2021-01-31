@@ -28,7 +28,7 @@
         </el-form-item>
         <div class="toRegister">
           没有账号，
-          <el-link type="primary" @click="toRegister()" style="font-size:17px">去注册</el-link>
+          <span @click="toRegister()">去注册</span>
         </div>
 
       </el-form>
@@ -63,7 +63,9 @@
         },
         methods: {
             onSubmit(formName) {
-                var vm = this;
+                this.$router.push('/index');
+                window.sessionStorage.setItem('token','tokenTest');
+                /*var vm = this;
                 this.$refs[formName].validate((valid) =>{
 
                     if (valid) {
@@ -101,7 +103,7 @@
                         Toast.fail("用户名或密码格式不正确");
                         return false;
                     }
-                });
+                });*/
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
@@ -115,8 +117,8 @@
 
 <style scoped>
   .login_box{
-    width: 250px;
-    height: 350px;
+    width: 80%;
+    height: 50%;
     background-color: rgba(0,0,0,0);
     position: absolute;
     left: 50%;
@@ -124,8 +126,8 @@
     transform: translate(-50%,-50%);
   }
   .login_box .avater_box {
-    height:100px;
-    width: 100px;
+    height:250px;
+    width: 250px;
     border: 1px solid #eee;
     border-radius: 50%;
     padding: 10px;
@@ -163,8 +165,12 @@
   .toRegister{
     display: flex;
     justify-content: flex-end;
-    font-size: 16px;
+    font-size: 33px;
     margin-bottom: 5px;
+  }
+  .toRegister span{
+    text-decoration: underline;
+    color: #1296db;
   }
 
   /deep/ .el-input__inner{

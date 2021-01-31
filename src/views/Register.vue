@@ -4,7 +4,7 @@
       <!--注册表单区域-->
       <el-form ref="form" :model="form" :rules="rules" class="register_form" label-position="left">
 
-        <span align="center" class="title">注册页面</span>
+        <span align="center" class="title">注册界面</span>
         <el-form-item prop="name" >
           <el-input nprefix-ico="iconfont icon-user" v-model="form.name" placeholder="请输入手机号码"></el-input>
         </el-form-item>
@@ -33,9 +33,9 @@
           <el-button type="primary" @click="onRegister('form')">注册</el-button>
           <el-button type="info" @click="resetForm('form')">重置</el-button>
         </el-form-item>
-        <div class="toLogin" style="font-size: 20px">
+        <div class="toLogin">
           已有账号，
-          <el-link type="primary" @click="toLogin()" style="font-size:20px">去登录</el-link>
+          <span @click="toLogin()">去登录</span>
         </div>
 
       </el-form>
@@ -172,12 +172,12 @@
 <style scoped>
   .title{
     display: block;
-    height: 40px;
+    height: 80px;
     width: 100%;
     margin: 0 auto;
-    padding-top: 30px;
-    padding-bottom: 10px;
-    font-size:24px
+    padding-top: 100px;
+    padding-bottom: 30px;
+    font-size:60px
   }
   .register_container{
     background: url("../assets/img/registerBackgroundImg.jpg");
@@ -205,7 +205,11 @@
   .toLogin{
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 5px;
+    font-size: 33px;
+  }
+  .toLogin span{
+    text-decoration: underline;
+    color: #1296db;
   }
 
   /deep/ .el-input__inner{

@@ -7,93 +7,146 @@
     <div class="main">
       <div>
         <div class="userName">
-          <span>账&#9号</span>
+          <span>账号</span>
           <span id="userName">{{userName}}</span>
         </div>
-        <div class="width50">
-          <span>新密码</span>
-          <el-input
-            v-model="newPassword"
-            type="password"
-            :show-password="true"
-            @focus="newPasswordFocus"
-            @blur="newPasswordBlur"
-            minlength="6"
-            maxlength="12"
-            placeholder="填写新密码"
-          ></el-input>
-        </div>
-        <div class="width50">
-          <span>确认密码</span>
-          <el-input
-            v-model="confirmPassword"
-            type="password"
-            :show-password="true"
-            @focus="confirmPasswordFocus"
-            @blur="confirmPasswordBlur"
-            minlength="6"
-            maxlength="12"
-            placeholder="再次填写确认"
-          ></el-input>
-        </div>
-        <div class="width50">
-          <span>邮&#9箱</span>
-          <el-input
-            v-model="email"
-            @focus="emailFocus"
-            @blur="emailBlur"
-            placeholder="填写绑定的邮箱"
-          ></el-input>
-        </div>
-        <div class="width50" id="code">
-          <span>验证码</span>
-          <el-input
-            v-model="codeNum"
-            @focus="codeFocus"
-            @blur="codeBlur"
-            minlength="6"
-            maxlength="6"
-            placeholder="6位验证码"
-            v-bind:disabled="canInput"
-          ></el-input>
-          <el-button type="success" @click="getCode" v-bind:disabled="canClick">{{content}}</el-button>
-        </div>
-        <div class="tips">
-          <span>密码必须是6-12位</span>
-        </div>
+
+        <van-form @submit="onSubmit">
+          <van-field class="ml4"
+                     v-model="newPassword"
+                     type="password"
+                     name="newPassword"
+                     label="新密码"
+                     placeholder="新密码"
+                     :rules="npwRules"
+                     clearable
+          />
+          <van-field class="ml4"
+                     v-model="confirmPassword"
+                     type="password"
+                     name="confirmPassword"
+                     label="确认密码"
+                     placeholder="再次输入密码"
+                     :rules="conPwRules"
+                     clearable
+          />
+          <van-field class="ml4"
+                     v-model="email"
+                     name="email"
+                     label="邮箱"
+                     placeholder="请输入绑定邮箱"
+                     :rules="emailRules"
+                     clearable
+          />
+          <van-field class="ml4"
+                     v-model="code"
+                     name="email"
+                     label="验证码"
+                     placeholder="6位验证码"
+                     :rules="codeRules"
+                     :disabled="canInput"
+          >
+            <template>
+              <van-button
+                round
+                type="info"
+                slot="right-icon"
+                size="small" native-type="button"
+                plain
+                @click="sendCode"
+                :disabled="canClick"
+              >{{sendCodeText}}</van-button>
+            </template>
+          </van-field>
+          <div style="margin: 16px;">
+            <van-button round block type="info" native-type="submit">提交</van-button>
+          </div>
+        </van-form>
+
+
       </div>
-      <div class="btn">
-        <el-button type="success" @click="findPassword">确&#9定</el-button>
-      </div>
+
     </div>
   </div>
 </template>
 
 <script>
-    import {Toast} from 'vant';
     import {Dialog} from 'vant';
-    var currentPasswordElement = document.getElementsByClassName("el-input");
-    //正则校验邮箱规则
-    //var emailRule = /^[A-Za-z\d]+[A-Za-z\d\-_\.]*@([A-Za-z\d]+[A-Za-z\d\-]*\\.)+[A-Za-z]{2,4}$/;
-    var emailRule = /^[A-Za-z\d]+[A-Za-z\d\-_\.]*@([A-Za-z\d]+[A-Za-z\d\-]*\.)+[A-Za-z]{2,4}$/;
-    //var emailRule = new RegExp(/^[A-Za-z\d]+[A-Za-z\d\-_\.]*@([A-Za-z\d]+[A-Za-z\d\-]*\.)+[A-Za-z]{2,4}$/);
+    import {Toast} from 'vant';
+    let emailRule = /^[A-Za-z\d]+[A-Za-z\d\-_\.]*@([A-Za-z\d]+[A-Za-z\d\-]*\.)+[A-Za-z]{2,4}$/;
+
     export default {
         name: 'FindPassword',
         data(){
             return {
                 userName: '',
-                newPassword: '',
                 confirmPassword: '',
+                newPassword: '',
                 email: '',
-                codeNum:'',
+                code: '',
+                canInput: true,
+                sendCodeText: '发送验证码',
                 canClick: false,
-                content:'获取验证码',
                 totalTime: 60,
-                canInput:true,
                 inputBorderBottomColor:{
                     focus:'blue',
                     blur:'red'
-                }
+                },
+                npwRules:[
+                    {
+                        required: true, message:'请填写新密码',trigger: 'onBlur'
+                    },
+                    {
+                        validator: value => {
+                            return /^[\w]{6,12}$/.test(value);
+                        },
+                        message: "请输入6-12位密码",
+                        trigger: 'onBlur'
+                    }
+                ],
+                conPwRules:[
+                    {
+                        required: true, message:'请再次输入密码',trigger: 'onBlur'
+                    },
+                    {
+                        validator: value => {
+                            return /^[\w]{6,12}$/.test(value);
+                        },
+                        message: "请输入6-12位密码",
+                        trigger: 'onBlur'
+                    },
+                    {
+                        validator: value => {
+                            return value === this.newPassword;
+                        },
+                        message: "两次密码输入不一致",
+                        trigger: 'onBlur'
+                    },
+                ],
+                emailRules:[
+                    {
+                        required: true, message:'请输入邮箱',trigger: 'onBlur'
+                    },
+                    {
+                        validator: value => {
+                            return emailRule.test(value);
+                        },
+                        message: "邮箱格式错误",
+                        trigger: 'onBlur'
+                    },
+                ],
+                codeRules:[
+                    {
+                        required:true,message:'请输入验证码',trigger: 'onBlur'
+                    },
+                    {
+                        validator: value => {
+                            return /^[0-9]{6}$/.test(value);
+                        },
+                        message: "6位验证码",
+                        trigger: 'onBlur'
+                    }
+                ]
             }
         },
         created() {
@@ -104,81 +157,60 @@
                 this.$router.push({
                     path: '/user/modifyPassword',
                     name: 'UserModifyPassword',
+                    params:{
+                        currentIndex: 2
+                    }
+                });
+            },
+            findPassword(){
+                this.$router.push({
+                    path: '/user/findPassword',
+                    name: 'UserFindPassword',
                     params: {
                         userName: this.userName
                     }
                 });
             },
-            newPasswordFocus(){
-                currentPasswordElement[0].style.borderBottomColor = this.inputBorderBottomColor.focus;
+            onSubmit(value){
+                Dialog.confirm({
+                    title: '提示',
+                    message: '是否确认更改密码'
+                }).then(()=>{
+                    //确认
+                    return new Promise((resolve) => {
+                        Toast.loading('提交中...');
+                        setTimeout(() => {
+                            Toast.clear();
+                        }, 1000);
+                    })
+                    //go on
+
+                }).catch(()=>{
+
+                });
+
             },
-            newPasswordBlur(){
-                currentPasswordElement[0].style.borderBottomColor = this.inputBorderBottomColor.blur;
-            },
-            confirmPasswordFocus(){
-                currentPasswordElement[1].style.borderBottomColor = this.inputBorderBottomColor.focus;
-            },
-            confirmPasswordBlur(){
-                currentPasswordElement[1].style.borderBottomColor = this.inputBorderBottomColor.blur;
-            },
-            emailFocus(){
-                //console.log(currentPasswordElement);
-                currentPasswordElement[2].style.borderBottomColor = this.inputBorderBottomColor.focus;
-            },
-            emailBlur(){
-                currentPasswordElement[2].style.borderBottomColor = this.inputBorderBottomColor.blur;
-            },
-            codeFocus(){
-                currentPasswordElement[3].style.borderBottomColor = this.inputBorderBottomColor.focus;
-            },
-            codeBlur(){
-                currentPasswordElement[3].style.borderBottomColor = this.inputBorderBottomColor.blur;
-            },
-            getCode(){
-              //先验证邮箱是否正确
-              //后端判断邮箱和账号是否匹配，若匹配就发送验证码，若不匹配返回该邮箱为非账号绑定邮箱
-                //test() 是 正则校验
-                //console.log(this.email);
-                //console.log(emailRule);
+            sendCode(){
                 var vm = this;
-                if(emailRule.test(this.email)){
-                    //请求接口
+                if(this.email === ''){
+                    Toast.fail('请先输入邮箱');
+                }else if(!emailRule.test(this.email)){
+                    Toast.fail('请输入正确的邮箱');
+                }else{
+                    //发送成功后将canInput = false；
                     vm.canInput = false;
                     vm.canClick = true;
-                    vm.content = vm.totalTime + "s重新发送";
+                    vm.sendCodeText = vm.totalTime + "s重新发送";
                     let clock = window.setInterval(() =>{
                         vm.totalTime--;
-                        vm.content = vm.totalTime + "s重新发送";
+                        vm.sendCodeText = vm.totalTime + "s重新发送";
                         if(vm.totalTime < 0){
                             window.clearInterval(clock);
-                            vm.content = "获取验证码";
+                            vm.sendCodeText = "重新发送验证码";
                             vm.totalTime = 60;
                             vm.canClick = false;
                         }
                     },1000);
-                }else{
-                    Toast.fail("请输入正确的邮箱");
-                }
-            },
-            findPassword(){
-                if(!isNaN(this.codeNum) && !this.codeNum.includes(' ') && this.codeNum.length === 6){
-                    if(this.newPassword.includes(' ') || this.newPassword.length < 6){
-                        Toast.fail("请检查密码格式");
-                    }else if(this.newPassword !== this.confirmPassword){
-                        Toast.fail("两次输入的密码不一致");
-                    }else{
-                        //发送请求
-                        Dialog.confirm({
-                            title: '提示',
-                            message: '是否更改密码'
-                        }).then(()=>{
-                            //确认
-                        }).catch(()=>{
-                            //取消
-                        });
-                    }
-                }else{
-                    Toast.fail("验证码为6位数字");
                 }
             }
         }
@@ -197,7 +229,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 26px;
+    font-size: 40px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -207,25 +239,31 @@
     background-color: #3a8ee6;
     width: 100%;
     height: 92%;
-    font-size: 22px;
+    font-size: 35px;
   }
   .header .back{
     position: relative;
     left: 25px;
     top: -10px;
-    font-size: 30px;
+    font-size: 50px;
     width: 5px;
     float:left;
-    margin-right: 30px;
   }
-  .main .el-button{
-    width: 30%;
-    height: 60px;
-    font-size: 36px;
-    margin-left: 35%;
-    margin-top: 80px;
-  }
-  .main div .width50{
+  /*.main .el-button{
+    font-size: 22px;
+  }*/
+  /*.main .btn{
+    margin-top: 30px;
+    width: 100%;
+    text-align: center;
+  }*/
+  /*.main .btn{
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-top: 10%;
+  }*/
+  /*.main div .width50{
     width: 90%;
     height: 50px;
     line-height: 50px;
@@ -236,50 +274,28 @@
     border: 0;
     border-bottom: solid 2px red;
     float: right;
-  }
+
+  }*/
   .main .userName{
     width: 90%;
     border-bottom: solid 1px mediumvioletred;
     padding-top: 50px;
     margin-bottom: 20px;
+    margin-left: 4%;
   }
-  .main :first-child div{
-    margin-left: 20px;
+  .main .ml4{
+    padding-left: 4%;
   }
   .main /deep/ .el-input__inner{
     background-color: #13ce66;
     border: 0;
     height: 30px;
     line-height: 30px;
-    font-size: 18px;
+    font-size: 20px;
   }
   #userName{
     padding-left: 30px;
   }
-  #code .el-input{
-    width: 33%;
-    float: none;
-  }
-  #code .el-button{
-    float: right;
-    width: 38%;
-    height: auto;
-    margin-left: 0;
-    margin-top: 10px;
-    font-size: 20px;
-  }
-  .main .el-button{
-    margin-top: 30px;
-    height: auto;
-    font-size: 22px;
-  }
-  .main .btn{
-    width: 100%;
-  }
-  .tips{
-    font-size: 18px;
-    margin-top: 25px;
-  }
-</style>
 
+</style>
 

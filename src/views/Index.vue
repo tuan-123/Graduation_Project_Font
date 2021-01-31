@@ -1,42 +1,30 @@
 <template>
-  <el-container>
-    <el-main>
+  <div class="container">
+    <div class="main">
       <router-view></router-view>
-    </el-main>
-    <el-footer>
-      <el-menu>
-        <el-row type="flex" class="row-bg">
-          <el-col :span="24">
-            <div @click="footer_clickIndex">
-              <i class="icon iconfont" style="text-align:center;" :style="{color:indexColor}">&#xe601;</i>
-            </div>
-          </el-col>
-          <el-col :span="24">
-            <div @click="footer_clickApp">
-              <i class="icon iconfont" style="text-align:center;" :style="{color:appColor}">&#xe602;</i>
-            </div>
-          </el-col>
-          <el-col :span="24">
-            <div  @click="footer_clickUser">
-              <i class="icon iconfont" style="text-align:center;" :style="{color:userColor}">&#xe63a;</i>
-            </div>
-          </el-col>
-        </el-row>
-
-      </el-menu>
-    </el-footer>
-  </el-container>
-
+    </div>
+    <div class="footer">
+      <div>
+        <span class="footer_span" @click="footer_clickIndex">
+          <i class="icon iconfont" :style="{color:indexColor}">&#xe601;</i>
+        </span>
+        <span class="footer_span" @click="footer_clickApp">
+          <i class="icon iconfont" :style="{color:appColor}">&#xe602;</i>
+        </span>
+        <span class="footer_span" @click="footer_clickUser">
+          <i class="icon iconfont" :style="{color:userColor}">&#xe63a;</i>
+        </span>
+      </div>
+    </div>
+  </div>
 
 </template>
 
 <script>
-  import GLOBAL from '../api/global_variable'
-    export default{
-        name:'Index',
+    export default {
+        name: "Index",
         data(){
             return{
-
                 indexColor: '',
                 appColor: '',
                 userColor: '',
@@ -47,16 +35,16 @@
             }
         },
         created(){
-          var currentIndex = this.$route.params.currentIndex;
-          if(currentIndex === undefined || currentIndex === 0){
-              this.indexColor = this.footer_click_color.clicked;
-          }else if(currentIndex === 1){
-              this.appColor = this.footer_click_color.clicked;
-          }else if(currentIndex === 2){
-              this.userColor = this.footer_click_color.clicked;
-          }
+            var currentIndex = this.$route.params.currentIndex;
+            if(currentIndex === undefined || currentIndex === 0){
+                this.indexColor = this.footer_click_color.clicked;
+            }else if(currentIndex === 1){
+                this.appColor = this.footer_click_color.clicked;
+            }else if(currentIndex === 2){
+                this.userColor = this.footer_click_color.clicked;
+            }
         },
-        methods:{
+        methods: {
             footer_clickIndex(){
                 var vm = this;
                 //console.log(123);
@@ -87,33 +75,41 @@
 </script>
 
 <style scoped>
-  .el-container{
+
+  .container{
     height: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
   }
-
-  .el-main {
-    background-color: #E9EEF3;
+  .main {
+    background-color: blue;
+    height: 92%;
     color: #333;
     padding: 0 0 0 0;
   }
-  .el-footer {
-    /*background-color: #B3C0D1;*/
+  .footer {
+    background-color: red;
+    height: 8%;
     color: #333;
     text-align: center;
-    line-height: 60px;
     padding: 0 0 0 0;
   }
-  .row-bg{
+  .footer div{
+    background-color: #795da3;
     height: 100%;
-    width: 100%;
+    line-height: 100%;
+    padding: 0 0 0 0;
   }
-  .row-bg div div i{
-    display: block;
-    height: 60px;
-    line-height: 60px;
-    font-size: 30px;
+  .footer_span{
+    height: 100%;
+    line-height: 100%;
+    width: 32.6%;
+    /*在高度为100%的情况下垂直中*/
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
   }
-
+  .footer_span i{
+    font-size: 50px;
+  }
 </style>

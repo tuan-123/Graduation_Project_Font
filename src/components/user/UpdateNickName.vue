@@ -5,24 +5,41 @@
       更改名字
       <span class="btn">
         <!--<input type="button" value="保存"/>-->
-        <el-button type="success" @click="saveNickName">保存</el-button>
+        <!--<el-button type="success" @click="saveNickName">保存</el-button>-->
+
       </span>
     </div>
     <div class="main">
-      <el-input
+      <!--<el-input
         @focus="focusMethod"
         @blur="blurMethod"
         type="text"
         maxlength="12"
         :disabled="false"
         v-model="nickName"
-      ></el-input>
-      <span>一个好名字可以让你的朋友更容易记住你</span>
+      ></el-input>-->
+      <div class="nickNameInput">
+        <van-cell-group>
+          <van-field
+            v-model="nickName"
+            placeholder="请输入昵称"
+            maxlength="12"
+            @focus="focusMethod"
+            @blur="blurMethod"
+            @border="false"
+          />
+        </van-cell-group>
+      </div>
+      <span>好名字可以让你的朋友更容易记住你</span>
+      <div class="saveBtn">
+        <van-button type="primary" text="保存"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import {Toast} from 'vant';
     export default {
         name: "updateNickName",
         data(){
@@ -40,18 +57,19 @@
             saveNickName(){
                 //发送请求
                 if(this.nickName === '') {
-                    this.$message.error("先输入昵称嘿");
+                    Toast.fail("先输入昵称嘿");
                 }else{
                     console.log(this.nickName);
                 }
                 //回跳页面
             },
             focusMethod(){
-                let inp = document.getElementsByClassName("el-input__inner")[0];
+                let inp = document.getElementsByClassName("nickNameInput")[0];
+                //console.log(inp)
                 inp.style.borderBottomColor = "#FFFFFF";
             },
             blurMethod(){
-                let inp = document.getElementsByClassName("el-input__inner")[0];
+                let inp = document.getElementsByClassName("nickNameInput")[0];
                 inp.style.borderBottomColor = "red";
             }
 
@@ -69,7 +87,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 26px;
+    font-size: 40px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -84,21 +102,11 @@
     position: relative;
     left: 25px;
     top: -10px;
-    font-size: 30px;
+    font-size: 50px;
     width: 5px;
     float:left;
-    margin-right: 55px;
   }
-  .header .btn{
-    float: right;
-    position: relative;
-    top: -10px;
-    padding-right: 10px;
-  }
-  .header .btn .el-button{
-    font-size: 17px;
-  }
-  .main /deep/ .el-input__inner{
+  /*.main /deep/ .el-input__inner{
     margin-top: 10%;
     background-color: #13ce66;
     margin-left: 5%;
@@ -108,11 +116,23 @@
     font-size: 24px;
     border: 0;
     border-bottom: solid 5px red;
-  }
+  }*/
   .main span{
-    padding-left: 5%;
-    font-size: 17px;
+    padding-left: 10%;
+    font-size: 30px;
     color: chartreuse;
+  }
+  .main .nickNameInput{
+    border-bottom: solid 2px red;
+    width: 80%;
+    margin-left: 10%;
+    padding-top: 10%;
+  }
+  .main .saveBtn{
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-top: 20%;
   }
 
 </style>

@@ -10,7 +10,7 @@
           <span>账号</span>
           <span id="userName">{{userName}}</span>
         </div>
-        <div class="width50">
+        <!--<div class="width50">
           <span>原密码</span>
           <el-input
             v-model="currentPassword"
@@ -48,15 +48,52 @@
             maxlength="12"
             placeholder="再次填写确认"
           ></el-input>
-        </div>
-        <div class="tips">
+        </div>-->
+
+        <!--<div class="tips">
           <span>密码必须是6-12位</span>
           <span id="forgottenPassword" @click="findPassword">忘记密码?</span>
-        </div>
+        </div>-->
+
+        <van-form @submit="onSubmit">
+          <van-field class="ml4"
+            v-model="currentPassword"
+            name="currentPassword"
+            type="password"
+            label="原密码"
+            placeholder="原密码"
+            :rules="cpwRules"
+          />
+          <van-field class="ml4"
+            v-model="newPassword"
+            type="password"
+            name="newPassword"
+            label="新密码"
+            placeholder="新密码"
+            :rules="npwRules"
+          />
+          <van-field class="ml4"
+           v-model="confirmPassword"
+           type="password"
+           name="confirmPassword"
+           label="确认密码"
+           placeholder="再次输入密码"
+           :rules="conPwRules"
+          />
+          <div style="margin: 16px;">
+            <van-button round block type="info" native-type="submit">提交</van-button>
+          </div>
+        </van-form>
+
       </div>
-      <div class="btn">
-        <el-button type="success" @click="modifyPassword">更&#9改</el-button>
+      <!--<div class="btn">
+        &lt;!&ndash;<el-button type="success" @click="modifyPassword">更&#9改</el-button>&ndash;&gt;
+        <van-button type="primary" text="更改" @click="modifyPassword"/>
+      </div>-->
+      <div id="forgottenPassword">
+        <span @click="findPassword">忘记密码?</span>
       </div>
+
     </div>
   </div>
 </template>
@@ -65,7 +102,7 @@
     import {Dialog} from 'vant';
     import {Toast} from 'vant';
 
-    var currentPasswordElement = document.getElementsByClassName("el-input");
+    /*var currentPasswordElement = document.getElementsByClassName("el-input");*/
   export default {
       name: 'ModifyPassword',
       data(){
@@ -77,7 +114,50 @@
               inputBorderBottomColor:{
                   focus:'blue',
                   blur:'red'
-              }
+              },
+              cpwRules:[
+                  {
+                      required:true,message:'请填写原密码',trigger: 'onBlur'
+                  },
+                  {
+                      validator: value => {
+                          return /^[\w]{6,12}$/.test(value);
+                      },
+                      message: "请输入6-12位密码",
+                      trigger: 'onBlur'
+                  }
+              ],
+              npwRules:[
+                  {
+                      required: true, message:'请填写新密码',trigger: 'onBlur'
+                  },
+                  {
+                      validator: value => {
+                          return /^[\w]{6,12}$/.test(value);
+                      },
+                      message: "请输入6-12位密码",
+                      trigger: 'onBlur'
+                  }
+              ],
+              conPwRules:[
+                  {
+                      required: true, message:'请再次输入密码',trigger: 'onBlur'
+                  },
+                  {
+                      validator: value => {
+                          return /^[\w]{6,12}$/.test(value);
+                      },
+                      message: "请输入6-12位密码",
+                      trigger: 'onBlur'
+                  },
+                  {
+                      validator: value => {
+                          return value === this.newPassword;
+                      },
+                      message: "两次密码输入不一致",
+                      trigger: 'onBlur'
+                  }
+              ]
           }
       },
       created() {
@@ -93,28 +173,28 @@
                   }
               });
           },
-          modifyPassword(){
-              Dialog.confirm({
-                  title: '提示',
-                  message: "是否确认更改密码"
-              }).then(()=>{
-                  //确定
-                  if(this.currentPassword.includes(' ') || this.newPassword.includes(' ')){
-                      //this.$message.error('密码不能含有空格');
-                      Toast.fail("密码不能含有空格");
+          /*modifyPassword(){
+              if(this.currentPassword.includes(' ') || this.newPassword.includes(' ')){
+                  //this.$message.error('密码不能含有空格');
+                  Toast.fail("密码不能含有空格");
+              }else{
+                  if(this.currentPassword.length < 6 || this.newPassword.length < 6 || this.confirmPassword.length < 6 ){
+                      Toast.fail('请检查密码长度');
+                  }else if(this.newPassword !== this.confirmPassword){
+                      Toast.fail('两次密码输入不一致');
                   }else{
-                      if(this.currentPassword.length < 6 || this.newPassword.length < 6 || this.confirmPassword.length < 6 ){
-                          Toast.fail('请检查密码长度');
-                      }else if(this.newPassword !== this.confirmPassword){
-                          Toast.fail('两次密码输入不一致');
-                      }else{
-                          //请求修改密码
-                      }
+                      //请求修改密码
+                      Dialog.confirm({
+                          title: '提示',
+                          message: "是否确认更改密码"
+                      }).then(()=> {
+                          //确定
+                      }).catch(()=>{
+
+                      });
                   }
-              }).catch(()=>{
-                 //取消
-              });
-              /*this.$confirm('是否确认更改密码','提示',{
+              }
+              /!*this.$confirm('是否确认更改密码','提示',{
                   confirmButtonText: '确认',
                   cancelButtonText: '取消',
                   type: 'warming'
@@ -133,9 +213,9 @@
                   }
               }).catch(_=>{
                   //取消
-              });*/
-          },
-          currentPasswordFocus(){
+              });*!/
+          },*/
+          /*currentPasswordFocus(){
               //console.log(currentPasswordElement);
               currentPasswordElement[0].style.borderBottomColor = this.inputBorderBottomColor.focus;
           },
@@ -153,7 +233,7 @@
           },
           confirmPasswordBlur(){
               currentPasswordElement[2].style.borderBottomColor = this.inputBorderBottomColor.blur;
-          },
+          },*/
           findPassword(){
               this.$router.push({
                   path: '/user/findPassword',
@@ -162,8 +242,26 @@
                       userName: this.userName
                   }
               });
-          }
+          },
+          onSubmit(value){
+              Dialog.confirm({
+                  title: '提示',
+                  message: '是否确认更改密码'
+              }).then(()=>{
+                  //确认
+                  return new Promise((resolve) => {
+                      Toast.loading('提交中...');
+                      setTimeout(() => {
+                          Toast.clear();
+                      }, 1000);
+                  })
+                  //go on
 
+              }).catch(()=>{
+
+              });
+
+          }
       }
 
 
@@ -180,7 +278,7 @@
     background-color: red;
     height: 5%;
     width: 100%;
-    font-size: 26px;
+    font-size: 40px;
     font-family: SimHei;
     padding-top: 5%;
     font-weight: bold;
@@ -190,26 +288,31 @@
     background-color: #3a8ee6;
     width: 100%;
     height: 92%;
-    font-size: 22px;
+    font-size: 35px;
   }
   .header .back{
     position: relative;
     left: 25px;
     top: -10px;
-    font-size:30px;
+    font-size: 50px;
     width: 5px;
     float:left;
-    margin-right: 30px;
   }
-  .main .el-button{
+  /*.main .el-button{
     font-size: 22px;
-  }
-  .main .btn{
+  }*/
+  /*.main .btn{
     margin-top: 30px;
     width: 100%;
     text-align: center;
-  }
-  .main div .width50{
+  }*/
+  /*.main .btn{
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-top: 10%;
+  }*/
+  /*.main div .width50{
     width: 90%;
     height: 50px;
     line-height: 50px;
@@ -221,15 +324,16 @@
     border-bottom: solid 2px red;
     float: right;
 
-  }
+  }*/
   .main .userName{
     width: 90%;
     border-bottom: solid 1px mediumvioletred;
     padding-top: 50px;
     margin-bottom: 20px;
+    margin-left: 4%;
   }
-  .main :first-child div{
-    margin-left: 20px;
+  .main .ml4{
+    padding-left: 4%;
   }
   .main /deep/ .el-input__inner{
     background-color: #13ce66;
@@ -241,14 +345,17 @@
   #forgottenPassword {
     color: blue;
     text-decoration: underline;
-    margin-left: 15px;
+    width: 100%;
+    text-align: center;
+    padding-top: 10%;
   }
   #userName{
     padding-left: 30px;
   }
-  .tips{
-    font-size: 18px;
+  /*.tips{
+    font-size: 30px;
     margin-top: 25px;
-  }
+  }*/
+
 </style>
 
