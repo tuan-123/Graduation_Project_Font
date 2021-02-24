@@ -2,7 +2,7 @@
   <div class="container">
     <div class="header">
       <span class="back" @click="toBack"> < </span>
-      更改名字
+      更改昵称
       <span class="btn">
         <!--<input type="button" value="保存"/>-->
         <!--<el-button type="success" @click="saveNickName">保存</el-button>-->
@@ -31,7 +31,7 @@
         </van-cell-group>
       </div>
       <span>好名字可以让你的朋友更容易记住你</span>
-      <div class="saveBtn">
+      <div class="saveBtn" @click="saveNickName">
         <van-button type="primary" text="保存"/>
       </div>
     </div>
@@ -39,7 +39,8 @@
 </template>
 
 <script>
-  import {Toast} from 'vant';
+   import {Toast} from 'vant';
+   import {Dialog} from 'vant';
     export default {
         name: "updateNickName",
         data(){
@@ -55,11 +56,52 @@
                 this.$router.push("/user/myDetail");
             },
             saveNickName(){
+                let vm = this;
                 //发送请求
                 if(this.nickName === '') {
                     Toast.fail("先输入昵称嘿");
+                }else if(this.nickName.length > 8){
+                    Toast.fail("昵称不能超过8个字符")
                 }else{
-                    console.log(this.nickName);
+                    //console.log(this.nickName);
+                    Dialog.confirm({
+                        title: '提示',
+                        message: '是否修改昵称为\n' + this.nickName
+                    }).then(()=>{
+                        //确认
+                        Toast({
+                            type: 'loading',
+                            message: '修改中...',
+                            duration: 0
+                        });
+                        setTimeout(() => {
+                            Toast.clear();
+                        }, 3000);
+                        this.axios({
+                            url: '/user/updateNickName',
+                            method: 'put',
+                            params:{
+                                userId: window.sessionStorage.getItem('userId'),
+                                nickName: vm.nickName
+                            }
+                        }).then(function (res) {
+                            clearTimeout();
+                            Toast.clear();
+                            if(res.data.code === 200){
+                                Toast.success("修改成功");
+                                vm.$router.push('/user/myDetail');
+                            }else{
+                                Toast.fail(res.data.msg);
+                            }
+                        }).catch(function (error) {
+                            //console.log(error);
+                            clearTimeout();
+                            Toast.clear();
+                            Toast.fail("服务器异常");
+                        });
+                    }).catch(()=>{
+
+                    });
                 }
                 //回跳页面
             },
@@ -85,7 +127,7 @@
   }
   .header{
     background-color: red;
-    height: 5%;
+    height: 70px;
     width: 100%;
     font-size: 40px;
     font-family: SimHei;
