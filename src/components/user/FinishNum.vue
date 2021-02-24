@@ -51,9 +51,12 @@
                 this.$router.push("/user/myDetail");
             },
             saveNum(){
+                let vm = this;
                 //发送请求
                 if(this.num === '') {
                     Toast.fail("先输入学号嘿");
+                }else if(this.num.length > 20){
+                    Toast.fail("学号不能超过20位");
                 }else{
                     /*if(isNaN(this.num)){
                         this.$message.error("请输入正确的学号啦");
@@ -85,6 +88,35 @@
                     }).then(()=>{
                        //确认
                        //console.log(this.num);
+                        Toast({
+                            type: 'loading',
+                            message: '绑定中...',
+                            duration: 0
+                        });
+                        setTimeout(() => {
+                            Toast.clear();
+                        }, 3000);
+                        this.axios({
+                            url: '/user/updateSchoolNum',
+                            method: 'put',
+                            params: {
+                                userId: window.sessionStorage.getItem('userId'),
+                                schoolNum: vm.num
+                            }
+                        }).then(function (res) {
+                            clearTimeout();
+                            Toast.clear();
+                            if(res.data.code === 200){
+                                Toast.success("绑定成功");
+                                vm.$router.push('/user/myDetail');
+                            }else{
+                                Toast.fail("绑定失败");
+                            }
+                        }).catch(function (error) {
+                            clearTimeout();
+                            Toast.clear();
+                            Toast.fail("服务器异常");
+                        });
                     }).catch(()=>{
                         //取消
                     });
@@ -112,7 +144,8 @@
   }
   .header{
     background-color: red;
-    height: 5%;
+    /*height: 5%;*/
+    height: 70px;
     width: 100%;
     font-size: 40px;
     font-family: SimHei;
