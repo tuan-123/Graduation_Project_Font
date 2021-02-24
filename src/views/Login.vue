@@ -73,9 +73,6 @@
                             message: '登录中...',
                             duration: 0
                         });
-                        setTimeout(() => {
-                            Toast.clear();
-                        }, 3000);
                         this.axios({
                             method: 'post',
                             url: '/user/login',
@@ -85,7 +82,6 @@
                             }
                         }).then(function (response) {
                             //console.log(response);
-                            clearTimeout();
                             Toast.clear();
                             if(response.data.code === 200){
                                 //登录成功
@@ -104,7 +100,6 @@
                                 Toast.fail(response.data.msg);
                             }
                         }).catch(function(error){
-                            clearTimeout();
                             Toast.clear();
                             Toast.fail("故障啦");
                             //console.log(error);
