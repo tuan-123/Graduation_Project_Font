@@ -13,6 +13,15 @@ import UserFinishSchool from '../components/user/SelectSchool'
 import UserFinishNum from '../components/user/FinishNum'
 import UserModifyPassword from '../components/user/ModifyPassword'
 import UserFindPassword from '../components/user/FindPassword'
+import AppsIdle from '../components/apps/idle/Idle'
+import AppsIdleDetail from '../components/apps/idle/IdleDetail'
+import EpidemicMap from '../components/apps/epidemic/Map'
+import UserIdle from '../components/user/MyIdle'
+import UserComment from '../components/user/Comment'
+import IssueIdle from '../components/issue/IdleIssue'
+import IssueAsk from '../components/issue/AskIssue'
+import IssueHelp from "../components/issue/HelpIssue";
+import AppsHelp from "../components/apps/help/Help";
 
 
 
@@ -71,10 +80,12 @@ const router = new Router({
       children: [
         {
           path: '/main/myIndex',
+          name: 'MainMyIndex',
           component: MainMyIndex
         },
         {
           path: '/main/myApp',
+          name: 'MainMyApp',
           component: MainMyApp
         },
         {
@@ -111,9 +122,58 @@ const router = new Router({
       name: 'UserFindPassword',
       component: UserFindPassword
     },
+    {
+      path: '/apps/idle',
+      name: 'AppsIdle',
+      component: AppsIdle
+    },
+    {
+      path: '/apps/idleDetail',
+      name: 'AppsIdleDetail',
+      component: AppsIdleDetail
+    },
+    {
+      path: '/epidemic/map',
+      name: "EpidemicMap",
+      component: EpidemicMap
+    },
+    {
+      path: '/user/idle',
+      name: 'UserIdle',
+      component: UserIdle
+    },
+    {
+      path: '/user/comment',
+      name: 'UserComment',
+      component: UserComment
+    },
+    {
+      path: '/issue/idleIssue',
+      component: IssueIdle
+    },
+    {
+      path: '/issue/askIssue',
+      component: IssueAsk
+    },
+    {
+      path: '/issue/helpIssue',
+      component: IssueHelp
+    },
+    {
+      path: '/apps/help',
+      component: AppsHelp
+    },
   ]
 });
-
+//挂载路由导航卫士
+router.beforeEach((to,from,next) => {
+  if(to.path === '/login' || to.path === '/register'){
+    return next();
+  }
+  const tokenStr = window.sessionStorage.getItem('token');
+  if(!tokenStr) return next('/login');
+  return next();
+});
 
 
 export default router;
