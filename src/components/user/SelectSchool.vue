@@ -50,54 +50,25 @@
                 value:-1,
                 show: false,
                 fieldValue: '',
-                options:[
-                    {
-                        value: 2,
-                        text:"广东",
-                        children:[
-                            {
-                                value: 45,
-                                text:"电子科技大学中山学院"
-                            },
-                            {
-                                value: 46,
-                                text: "中山大学"
-                            },
-                            {
-                                value: 47,
-                                text:"电子科技大学"
-                            },
-                            {
-                                value: 48,
-                                text: "背景大学"
-                            }
-                        ]
-                    },
-                    {
-                        value: 3,
-                        text:"上海",
-                        children:[
-                            {
-                                value: 51,
-                                text:"科技大学中山学院"
-                            },
-                            {
-                                value: 52,
-                                text: "大学"
-                            },
-                            {
-                                value: 53,
-                                text:"电子科技大学"
-                            },
-                            {
-                                value: 54,
-                                text: "背景大学"
-                            }
-                        ]
-                    }
-                ]
+                options:[]
 
             }
+        },
+        created(){
+            let vm = this;
+            this.axios({
+                url: '/school/getAllSchool',
+                method: 'get'
+            }).then(function(res){
+                //console.log(res);
+                if(res.data.code === 200){
+                    vm.options = res.data.data;
+                }else{
+                    Toast.fail(res.data.msg);
+                }
+            }).catch(function (error) {
+                Toast.fail("服务器异常");
+            })
         },
         methods:{
             toBack(){
@@ -108,6 +79,7 @@
                 this.fieldValue = selectedOptions.map((option) => option.text).join('/');
             },
             saveSchool(){
+                let vm = this;
                 if(this.value === -1){
                     Toast.fail('请选择学校');
                 }else{
@@ -116,7 +88,36 @@
                         message: '您所绑定的学校为:\n' + this.fieldValue
                     }).then(()=>{
                        // 确定
-                       console.log(this.value);
+                       //console.log(this.value);
+                        Toast({
+                            type: 'loading',
+                            message: '绑定中...',
+                            duration: 0
+                        });
+                        setTimeout(() => {
+                            Toast.clear();
+                        }, 3000);
+                        this.axios({
+                            url: '/user/updateSchool',
+                            method: 'put',
+                            params: {
+                                userId: window.sessionStorage.getItem('userId'),
+                                schoolId: vm.value
+                            }
+                        }).then(function (res) {
+                            clearTimeout();
+                            Toast.clear();
+                            if(res.data.code === 200){
+                                Toast.success("绑定成功");
+                                vm.$router.push("/user/myDetail")
+                            }else{
+                                Toast.fail(res.data.msg);
+                            }
+                        }).catch(function (error) {
+                            clearTimeout();
+                            Toast.clear();
+                            Toast.fail("服务器异常");
+                        })
                     }).catch(()=>{
                         //取消
                     });
@@ -134,7 +135,8 @@
   }
   .header{
     background-color: red;
-    height: 5%;
+    /*height: 5%;*/
+    height: 70px;
     width: 100%;
     font-size: 40px;
     font-family: SimHei;
