@@ -40,7 +40,7 @@
           />
           <van-field class="ml4"
                      v-model="code"
-                     name="email"
+                     name="code"
                      label="验证码"
                      placeholder="6位验证码"
                      :rules="codeRules"
@@ -150,7 +150,8 @@
             }
         },
         created() {
-            this.userName = this.$route.params.userName;
+            //this.userName = this.$route.params.userName;
+            this.userName = window.sessionStorage.getItem('userId');
         },
         methods:{
             toBack(){
@@ -158,7 +159,7 @@
                     path: '/user/modifyPassword',
                     name: 'UserModifyPassword',
                     params:{
-                        currentIndex: 2
+                        userName: this.userName
                     }
                 });
             },
@@ -172,18 +173,46 @@
                 });
             },
             onSubmit(value){
+                let vm = this;
                 Dialog.confirm({
                     title: '提示',
                     message: '是否确认更改密码'
                 }).then(()=>{
                     //确认
                     return new Promise((resolve) => {
-                        Toast.loading('提交中...');
+                        Toast({
+                            type: 'loading',
+                            message: '提交中...',
+                            duration: 0
+                        });
                         setTimeout(() => {
                             Toast.clear();
-                        }, 1000);
-                    })
-                    //go on
+                        }, 3000);
+                        this.axios({
+                            url: '/user/findPassword',
+                            method: 'post',
+                            data:{
+                                userId: vm.userName,
+                                password: value.confirmPassword,
+                                email: value.email,
+                                code: value.code
+                            }
+                        }).then(function(res){
+                            clearTimeout();
+                            Toast.clear();
+                            if(res.data.code === 200){
+                                Toast.success("修改成功，请重新登录");
+                                window.sessionStorage.clear();
+                                vm.$router.push("/login");
+                            }else{
+                                Toast.fail(res.data.msg);
+                            }
+                        }).catch(function (error) {
+                            clearTimeout();
+                            Toast.clear();
+                            Toast.fail("故障啦");
+                        })
+                    });
 
                 }).catch(()=>{
 
@@ -198,19 +227,48 @@
                     Toast.fail('请输入正确的邮箱');
                 }else{
                     //发送成功后将canInput = false；
-                    vm.canInput = false;
-                    vm.canClick = true;
-                    vm.sendCodeText = vm.totalTime + "s重新发送";
-                    let clock = window.setInterval(() =>{
-                        vm.totalTime--;
-                        vm.sendCodeText = vm.totalTime + "s重新发送";
-                        if(vm.totalTime < 0){
-                            window.clearInterval(clock);
-                            vm.sendCodeText = "重新发送验证码";
-                            vm.totalTime = 60;
-                            vm.canClick = false;
+                    Toast({
+                        type: 'loading',
+                        message: '发送中...',
+                        duration: 0
+                    });
+                    setTimeout(() => {
+                        Toast.clear();
+                    }, 3000);
+                    this.axios({
+                        url: '/user/findPasswordSendCode',
+                        method: 'post',
+                        params:{
+                            userId: vm.userName,
+                            email: vm.email
+                        },
+                    }).then(function (res) {
+                        clearTimeout();
+                        Toast.clear();
+                        if(res.data.code === 200){
+                            //成功
+                            Toast.success("发送成功");
+                            vm.canInput = false;
+                            vm.canClick = true;
+                            vm.sendCodeText = vm.totalTime + "s重新发送";
+                            let clock = window.setInterval(() =>{
+                                vm.totalTime--;
+                                vm.sendCodeText = vm.totalTime + "s重新发送";
+                                if(vm.totalTime < 0){
+                                    window.clearInterval(clock);
+                                    vm.sendCodeText = "重新发送验证码";
+                                    vm.totalTime = 60;
+                                    vm.canClick = false;
+                                }
+                            },1000);
+                        }else{
+                            Toast.fail(res.data.msg);
                         }
-                    },1000);
+                    }).catch(function(error){
+                        clearTimeout();
+                        Toast.clear();
+                        Toast.fail("故障啦");
+                    });
                 }
             }
         }
@@ -227,7 +285,8 @@
   }
   .header{
     background-color: red;
-    height: 5%;
+    /*height: 5%;*/
+    height: 70px;
     width: 100%;
     font-size: 40px;
     font-family: SimHei;
