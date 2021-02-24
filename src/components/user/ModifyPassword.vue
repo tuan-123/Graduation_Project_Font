@@ -161,7 +161,8 @@
           }
       },
       created() {
-          this.userName = this.$route.params.userName;
+          //this.userName = this.$route.params.userName;
+          this.userName = window.sessionStorage.getItem('userId');
       },
       methods:{
           toBack(){
@@ -244,19 +245,46 @@
               });
           },
           onSubmit(value){
+              let vm = this;
               Dialog.confirm({
                   title: '提示',
                   message: '是否确认更改密码'
               }).then(()=>{
                   //确认
                   return new Promise((resolve) => {
-                      Toast.loading('提交中...');
+                      //Toast.loading('提交中...');
+                      Toast({
+                          type: 'loading',
+                          message: '提交中...',
+                          duration: 0
+                      });
                       setTimeout(() => {
                           Toast.clear();
-                      }, 1000);
-                  })
-                  //go on
-
+                      }, 3000);
+                      this.axios({
+                          url: '/user/updatePassword',
+                          method: 'post',
+                          data:{
+                              userId: window.sessionStorage.getItem('userId'),
+                              oldPassword: value.currentPassword,
+                              newPassword: value.newPassword
+                          }
+                      }).then(function (res) {
+                          clearTimeout();
+                          Toast.clear();
+                          if(res.data.code === 200){
+                              Toast.success("修改成功，请重新登录");
+                              window.sessionStorage.clear();
+                              vm.$router.push("/login");
+                          }else{
+                              Toast.fail(res.data.msg);
+                          }
+                      }).catch(function (error) {
+                          clearTimeout();
+                          Toast.clear();
+                          Toast.fail("故障啦");
+                      })
+                  });
               }).catch(()=>{
 
               });
@@ -276,7 +304,8 @@
   }
   .header{
     background-color: red;
-    height: 5%;
+    /*height: 5%;*/
+    height: 70px;
     width: 100%;
     font-size: 40px;
     font-family: SimHei;
