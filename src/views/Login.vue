@@ -64,7 +64,57 @@
         methods: {
             onSubmit(formName) {
                 this.$router.push('/index');
-                window.sessionStorage.setItem('token','tokenTest');
+                let vm = this;
+                this.$refs[formName].validate((valid) =>{
+                    if (valid) {
+                        //alert('submit!');
+                        Toast({
+                            type: 'loading',
+                            message: '登录中...',
+                            duration: 0
+                        });
+                        setTimeout(() => {
+                            Toast.clear();
+                        }, 3000);
+                        this.axios({
+                            method: 'post',
+                            url: '/user/login',
+                            data: {
+                                phone: vm.form.name,
+                                password: vm.form.password
+                            }
+                        }).then(function (response) {
+                            //console.log(response);
+                            clearTimeout();
+                            Toast.clear();
+                            if(response.data.code === 200){
+                                //登录成功
+                                //1、将登录成功之后的token保存到客户端的sessionStorage
+                                //  1.1、项目除了登录之后的其他API接口，必须在登录之后才能访问
+                                //  1.2、token只应在当前网站打开期间有效，所有将token保存在sessionStorage中
+                                window.sessionStorage.setItem('token',response.data.token);
+                                //2保存当前用户信息
+                                window.sessionStorage.setItem('userId',response.data.data.phone);
+                                Toast.success("登录成功");
+                                vm.$router.push('/index');
+
+                            }else if(response.data.code === 1001){
+                                //alert(response.data.msg);;
+                                //vm.$message.error(response.data.msg);
+                                Toast.fail(response.data.msg);
+                            }
+                        }).catch(function(error){
+                            clearTimeout();
+                            Toast.clear();
+                            Toast.fail("故障啦");
+                            //console.log(error);
+                        });
+                    } else {
+                        //this.$message.error("用户名或密码格式不正确");
+                        Toast.fail("用户名或密码格式不正确");
+                        return false;
+                    }
+                });
                 /*var vm = this;
                 this.$refs[formName].validate((valid) =>{
 
