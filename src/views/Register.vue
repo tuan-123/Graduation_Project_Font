@@ -44,6 +44,7 @@
 </template>
 
 <script>
+    import {Toast} from 'vant';
     export default {
         name: "Register",
         data() {
@@ -86,7 +87,7 @@
                     ],
                     code:[
                         {required:true,message:'请输入邮箱',trigger:'blur'},
-                        {min:6,max:6,message:'请输入六位的验证码',trigger:'blur'},
+                        {pattern: /^[0-9]{6}$/,message:'请输入六位的验证码',trigger:'blur'},
                     ]
                 }
             }
@@ -96,17 +97,27 @@
                 var vm = this;
                 this.$refs[formName].validate((valid) =>{
                     if(valid){
+                        Toast({
+                            type: 'loading',
+                            message: '注册中...',
+                            duration: 0
+                        });
+                        setTimeout(() => {
+                            Toast.clear();
+                        }, 3000);
                         this.axios({
                             method: 'post',
-                            url: 'http://localhost:8081/user/register',
+                            url: '/user/register',
                             data: {
-                                userId: vm.form.name,
+                                phone: vm.form.name,
                                 password: vm.form.password,
                                 email: vm.form.email,
                                 code: vm.form.code
                             }
                         }).then(function (response) {
                             //console.log(response);
+                            clearTimeout();
+                            Toast.clear();
                             if(response.data.code == 200){
                                 //注册成功
                                 vm.$router.push("/Login");
@@ -114,6 +125,10 @@
                                 //alert(response.data.msg);;
                                 vm.$message.error(response.data.msg);
                             }
+                        }).catch(function (error) {
+                            clearTimeout();
+                            Toast.clear();
+                            Toast.fail("故障啦");
                         })
                     }else{
                         this.$message.error("请重新检查哦！");
@@ -133,17 +148,27 @@
                 if(this.form.email === '' || this.form.name === ''){
                     this.$message.error("请先输入手机号码和邮箱！");
                 }else{
+                    Toast({
+                        type: 'loading',
+                        message: '发送中...',
+                        duration: 0
+                    });
+                    setTimeout(() => {
+                        Toast.clear();
+                    }, 3000);
                     this.axios({
-                        url: 'http://localhost:8081/user/sendCode',
-                        method: 'get',
+                        url: '/user/sendEmailCode',
+                        method: 'post',
 
                         params: {
                             email: vm.form.email,
-                            userId: vm.form.name
+                            phone: vm.form.name
                         }
 
                     }).then(function (response) {
                         //console.log(response);
+                        clearTimeout();
+                        Toast.clear();
                         if(response.data.code == 200){
                             vm.form.isInput = false;
                             vm.form.canClick = true;
@@ -159,10 +184,14 @@
                                 }
                             },1000);
                         }else if(response.data.code == 1001){
-                            //alert(response.data.msg);;
+                            //alert(response.data.msg);
                             vm.$message.error(response.data.msg);
                         }
-                    });
+                    }).catch(function (error) {
+                        clearTimeout();
+                        Toast.clear();
+                        Toast.fail("故障啦");
+                    })
                 }
             }
         }
