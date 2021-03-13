@@ -47,12 +47,12 @@
             </van-uploader>-->
           </span>
         </div>
-        <div>
+        <div @click="updateNickName">
           <span>昵&#9称</span>
 
           <span class="floatRight">
             {{nickName}}
-            <span @click="updateNickName">&#9></span></span>
+            <span>&#9></span></span>
         </div>
         <div>
           <span>账&#9号</span>
@@ -66,18 +66,25 @@
             {{email}}
           </span>
         </div>
-        <div>
+        <div @click="selectSchool">
           <span>学&#9校</span>
           <span class="floatRight" :style="{color:schoolNameColor}">
             {{schoolName}}
-            <span v-show="toSelectSchool" @click="selectSchool">&#9></span>
+            <span v-show="toSelectSchool">&#9></span>
           </span>
         </div>
-        <div>
+        <div @click="finishNum">
           <span>学&#9号</span>
           <span class="floatRight" :style="{color:numColor}">
             {{num}}
-            <span v-show="toFinishNum" @click="finishNum">&#9></span>
+            <span v-show="toFinishNum">&#9></span>
+          </span>
+        </div>
+        <div @click="finishFaceLogin">
+          <span>人脸登录</span>
+          <span class="floatRight" :style="{color:faceLoginColor}">
+            {{faceLogin}}
+            <span v-show="toFinishFaceLogin">&#9></span>
           </span>
         </div>
 
@@ -110,6 +117,9 @@
                 num:'-1',
                 numColor:'#808A87',
                 toFinishNum: true,
+                faceLoginColor: '#808A87',
+                faceLogin: 0,
+                toFinishFaceLogin: true,
                 userImg: ''
             }
         },
@@ -131,6 +141,7 @@
                    vm.schoolName = res.data.data.schoolName;
                    vm.email = res.data.data.email;
                    vm.num = res.data.data.schoolNum;
+                   vm.faceLogin = res.data.data.faceLogin;
 
                    if(vm.schoolName === '-1'){
                        vm.schoolName = "未绑定";
@@ -145,6 +156,14 @@
                    }else{
                        vm.numColor = '#FFAAFF';
                        vm.toFinishNum = false;
+                   }
+                   if(vm.faceLogin === 0){
+                       vm.faceLogin = "未开启";
+                       vm.faceLoginColor = '#808A87';
+                   }else if(vm.faceLogin === 1){
+                       vm.faceLogin = "已开启";
+                       vm.faceLoginColor = '#FFAAFF';
+                       vm.toFinishFaceLogin = false;
                    }
 
                }else{
@@ -193,6 +212,9 @@
             },
             finishNum(){
                 this.$router.push("/user/finishNum");
+            },
+            finishFaceLogin(){
+                this.$router.push("/user/finishFaceLogin");
             },
             /*afterRead(file){
                 //console.log(file);
