@@ -31,6 +31,13 @@
           <span @click="toRegister()">去注册</span>
         </div>
 
+        <div style="margin-top: 20px">
+          <div style="text-align:center;color: #8c939d">---------------其他方式---------------</div>
+          <div style="text-align: center;margin-top: 10px">
+            <van-icon name="smile" size="1.2rem" color="yellow" @click="clickFaceLogin"/>
+          </div>
+        </div>
+
       </el-form>
     </div>
   </div>
@@ -155,6 +162,9 @@
             },
             toRegister(){
                 this.$router.push("/register");
+            },
+            clickFaceLogin(){
+                this.$router.push("/faceLogin");
             }
         }
     }
