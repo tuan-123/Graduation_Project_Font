@@ -22,6 +22,10 @@ import IssueIdle from '../components/issue/IdleIssue'
 import IssueAsk from '../components/issue/AskIssue'
 import IssueHelp from "../components/issue/HelpIssue";
 import AppsHelp from "../components/apps/help/Help";
+import UserHelp from "../components/user/MyHelp";
+import LinkBlank from "../components/blankPage/Link";
+import FaceLogin from "../views/FaceLogin";
+import FinishFaceLogin from "../components/user/FinishFaceLogin";
 
 
 
@@ -96,6 +100,10 @@ const router = new Router({
       ]
     },
     {
+      path: '/faceLogin',
+      component: FaceLogin
+    },
+    {
       path:'/user/myDetail',
       component: UserDetail
     },
@@ -148,6 +156,10 @@ const router = new Router({
       component: UserComment
     },
     {
+      path: '/user/myHelp',
+      component: UserHelp
+    },
+    {
       path: '/issue/idleIssue',
       component: IssueIdle
     },
@@ -163,11 +175,21 @@ const router = new Router({
       path: '/apps/help',
       component: AppsHelp
     },
+    {
+      path: '/link/blank',
+      name: 'linkBlank',
+      component: LinkBlank
+    },
+    {
+      path: '/user/finishFaceLogin',
+      component: FinishFaceLogin
+    }
+
   ]
 });
 //挂载路由导航卫士
 router.beforeEach((to,from,next) => {
-  if(to.path === '/login' || to.path === '/register'){
+  if(to.path === '/login' || to.path === '/register' || to.path === '/faceLogin'){
     return next();
   }
   const tokenStr = window.sessionStorage.getItem('token');
