@@ -4,19 +4,29 @@
       <van-image
         width="40"
         height="40"
-        src="http://localhost:8087/userImg/defaultImg.jpg"
+        :src="userImg"
       />
     </div>
     <div class="text">
+      <div style="float: right;" v-if="userId === myId">
+        <van-icon name="delete-o" size="0.7rem" color="yellow" @click="deleted(id)"/>
+      </div>
       <div class="user_name">
         {{username}}
       </div>
       <div class="content">
         {{content}}
       </div>
-      <div>
-        <!--图片宫格-->
-
+      <div v-if="photos !== null && photos.length !== 0">
+        <van-image
+          v-for="(item,index) in photos"
+          :key="index"
+          width="2.2rem"
+          height="2.2rem"
+          fit="fill"
+          :src="httpBaseUrl + item"
+          style="margin-right:0.3rem"
+        />
       </div>
       <div class="comment_click">
         <input class="comment_input" v-model="txt" v-show="isShow" placeholder="请输入评论内容">
@@ -26,11 +36,11 @@
           <van-icon name="ellipsis" size="20" class="comment_click_icon" @click="showInput"></van-icon>
         </div>
       </div>
-      <div v-if="comment !== ''">
+      <div v-if="commentList !== ''">
         <div class="comment">
-          <div v-for="(item,i) in comment">
-            <span class="title">机器人{{i+1}}:&#9 </span>
-            <span>{{item}}</span>
+          <div v-for="(item,i) in commentList">
+            <span class="title">{{i+1}}楼:&#9 </span>
+            <span>{{item.content}}</span>
           </div>
         </div>
       </div>
@@ -40,13 +50,23 @@
 </template>
 
 <script>
+  import {Dialog} from 'vant';
   import {Toast} from 'vant';
+  import GLOBAL from '../../api/global_variable';
     export default {
         name: "MyComment",
         data(){
             return{
+                httpBaseUrl: GLOBAL.httpBaseUrl,
                 isShow:false,
                 txt:'',
+                commentList: this.comment,
+                myId: window.sessionStorage.getItem('userId'),
+            }
+        },
+        watch: {
+            comment(newValue,oldValue){
+                this.commentList = newValue;
             }
         },
         methods:{
@@ -54,33 +74,104 @@
                 this.isShow = !this.isShow;
             },
             send(){
-                this.isShow = false;
-                console.log(this.txt);
-                console.log(this.id);
-                if(this.txt !== ''){
-                    this.comment.push(this.txt);
+                let vm = this;
+                //console.log(this.txt);
+                //console.log(this.id);
+                if(this.txt !== '' && this.txt.trim().length > 0){
+                    let vm = this;
+                    Toast({
+                        type: 'loading',
+                        message: '提交中...',
+                        duration: 0
+                    });
+                    this.axios({
+                        url: '/comment/commentIssue',
+                        method: 'post',
+                        data: {
+                            parentId: vm.id,
+                            userId: window.sessionStorage.getItem('userId'),
+                            content: vm.txt
+                        }
+                    }).then(function (res) {
+                        Toast.clear();
+                        if(res.data.code === 200){
+                            //console.log(res);
+                            vm.commentList = res.data.data;
+                            Toast.success('评论成功');
+                        }else{
+                            Toast.fail(res.data.msg);
+                        }
+                    }).catch(function(err){
+                        Toast.clear();
+                        Toast.fail("故障啦");
+                    });
                     this.txt = '';
-                    Toast.success('评论成功');
+                    this.isShow = false;
                 }
+            },
+            deleted(id){
+                //console.log(id);
+                let vm = this;
+                Dialog.confirm({
+                    title: '提示',
+                    message: '是否确认删除?'
+                }).then(()=>{
+                    this.axios({
+                        url: '/ask/deleteAskById',
+                        method: 'get',
+                        params: {
+                            id: id
+                        }
+                    }).then(function (res) {
+                        if(res.data.code === 200){
+                            vm.$emit('MyRefresh','');//触发父组件函数
+                            Toast.success("已删除");
+                        }else{
+                            Toast.fail(res.data.msg);
+                        }
+                    }).catch(function(err){
+                        Toast.fail("故障啦");
+                    });
+                }).catch(()=>{
 
+                });
             }
         },
         props:{
             id:{
-                type:String,
-                default:''
+                type:Number,
+                default: 0
+            },
+            userId:{
+                type: String,
+                default: '0'
+            },
+            userImg:{
+                type: String,
+                default: GLOBAL.httpBaseUrl + "/userImg/defaultImg.jpg"
             },
             username:{
                 type:String,
-                default:''
+                default: '神秘人'
             },
             content:{
                 type:String,
                 default:''
             },
+            photos:{
+                type: Array,
+                default: ()=> []
+            },
+            hasResolve:{
+                type: Number,
+                default: 0
+            },
             comment:{
                 type:Array,
-                default:''
+                default: ()=> []
+            },
+            createTime:{
+                type:String,
             }
         }
     }

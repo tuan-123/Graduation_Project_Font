@@ -7,11 +7,11 @@
     <div class="swipe">
       <van-swipe :autoplay="3000">
         <van-swipe-item v-for="(image, index) in images" :key="index">
-          <img v-lazy="image" class="imgSize" />
+          <img v-lazy="httpBaseUrl + image" class="imgSize" />
         </van-swipe-item>
       </van-swipe>
     </div>
-    <div class="content">
+    <div class="content" v-if="title !== ''">
       <div>
         <div>
           <span class="priceSymbol">￥</span>
@@ -42,10 +42,11 @@
       </div>
       <nut-popup v-model="show" round position="bottom" closeable class="popup">{{phone}}</nut-popup>
     </div>
-    <div class="comment">
+    <div class="comment" v-if="commentList.length > 0">
+      <!--评论内容 在 content属性里-->
       <div v-for="(item,index) in commentList">
         <span style="color:red">{{index + 1}}楼:&#9</span>
-        <span>{{item}}</span>
+        <span>{{item.content}}</span>
       </div>
     </div>
     <div style="width:100%;position: fixed;bottom: 0" v-show="showCommentInput">
@@ -66,24 +67,25 @@
 
 <script>
     import {Toast} from 'vant'
+    import GLOBAL from '../../api/global_variable'
     export default {
         name: "MyIdleDetail",
         data(){
             return{
+                httpBaseUrl: GLOBAL.httpBaseUrl,
                 inputValue: '',
                 showCommentInput: false,
-                show:false,
-
+                show:false
             }
         },
         props:{
-            id:{
-                type: String,
-                default:''
+            id: {
+                type: Number,
+                default: ''
             },
             price: {
-                type: String,
-                default: '0.00'
+                type: Number,
+                default: 0.00
             },
             tabList:{
                 type: Array,
@@ -129,11 +131,39 @@
                 Toast.fail("还未开发");
             },
             comment(){
-                if(this.inputValue !== ''){
-                    console.log(this.inputValue);
-                    Toast.success('评论成功');
+                //判断是否为空串或纯为空格
+                if(this.inputValue !== '' && this.inputValue.trim().length > 0){
+                    let vm = this;
+                    Toast({
+                        type: 'loading',
+                        message: '提交中...',
+                        duration: 0
+                    });
+                    this.axios({
+                        url: '/comment/commentIssue',
+                        method: 'post',
+                        data: {
+                            parentId: vm.id,
+                            userId: window.sessionStorage.getItem('userId'),
+                            content: vm.inputValue
+                        }
+                    }).then(function (res) {
+                        Toast.clear();
+                        if(res.data.code === 200){
+                            //console.log(res);
+                            vm.commentList = res.data.data;
+                            Toast.success('评论成功');
+                        }else{
+                            Toast.fail(res.data.msg);
+                        }
+                    }).catch(function(err){
+                        Toast.clear();
+                        Toast.fail("故障啦");
+                    });
                     this.inputValue = '';
                 }
+                //console.log(this.id); // props 的 id
+                this.inputValue = '';
                 this.showCommentInput = false;
             }
         }

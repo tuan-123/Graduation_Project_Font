@@ -4,10 +4,13 @@
       <van-image
         width="40"
         height="40"
-        src="http://localhost:8087/userImg/defaultImg.jpg"
+        :src="userImg"
       />
     </div>
     <div class="text">
+      <div style="float: right;" v-if="userId === myId">
+        <van-icon name="delete-o" size="0.7rem" color="yellow" @click="deleted(id)"/>
+      </div>
       <div class="user_name">
         {{username}}
       </div>
@@ -33,34 +36,46 @@
           <span>{{helpCommission}}</span>
           <span>元</span>
         </div>
-        <div>
+        <div v-if="helpDetail !== ''">
           <span>【附加】：</span>
           <span>{{helpDetail}}</span>
         </div>
       </div>
-      <div>
+      <div v-if="photos !== null && photos.length !== 0">
         <!--图片宫格-->
+        <van-image
+          v-for="(item,index) in photos"
+          :key="index"
+          width="2.2rem"
+          height="2.2rem"
+          fit="fill"
+          :src="httpBaseUrl + item"
+          style="margin-right:0.3rem;margin-bottom:0.3rem"
+        />
 
       </div>
       <div class="comment_click">
+        <div class="showIsAccept" v-if="canShowIsAccept" v-show="!isShow">
+          {{helpState === 1 ? "已接单: " + acceptUserId : "未接单"}}
+        </div>
         <input class="comment_input" v-model="txt" v-show="isShow" placeholder="请输入评论内容">
         <van-button class="button" v-show="isShow" size="small" color="red" round @click="send">发送</van-button>
         </input>
         <div style="background-color: red">
           <van-icon name="ellipsis" size="25" class="comment_click_icon" @click="showInput"></van-icon>
         </div>
-        <div style="background-color: red">
-          <van-icon name="cart-o" size="25" class="comment_click_icon" @click="accept" v-show="!isShow && (phone === '')"></van-icon>
+        <div style="background-color: red" v-if="canAccept">
+          <van-icon name="cart-o" size="25" class="comment_click_icon" @click="accept(id)" v-show="!isShow"></van-icon>
         </div>
-        <div style="background-color: red">
-          <van-icon name="phone-o" size="25" class="comment_click_icon" @click="clickPhone" v-show="!isShow && (phone!== '')"></van-icon>
+        <div style="background-color: red" v-if="canPhone">
+          <van-icon name="phone-o" size="25" class="comment_click_icon" @click="clickPhone" v-show="!isShow"></van-icon>
         </div>
       </div>
       <div v-if="comment !== ''">
         <div class="comment">
           <div v-for="(item,i) in comment">
-            <span class="title">机器人{{i+1}}:&#9 </span>
-            <span>{{item}}</span>
+            <span class="title">{{i+1}}楼:&#9 </span>
+            <span>{{item.content}}</span>
           </div>
         </div>
       </div>
@@ -73,13 +88,16 @@
 <script>
     import {Toast} from 'vant';
     import {Dialog} from 'vant';
+    import GLOBAL from '../../api/global_variable';
     export default {
         name: "MyHelp",
         data(){
             return{
                 isShow:false,
+                httpBaseUrl: GLOBAL.httpBaseUrl,
                 /*show: false,*/
                 txt:'',
+                myId: window.sessionStorage.getItem('userId'),
             }
         },
         methods:{
@@ -88,22 +106,70 @@
             },
             send(){
                 this.isShow = false;
-                console.log(this.txt);
-                console.log(this.id);
-                if(this.txt !== ''){
-                    this.comment.push(this.txt);
+                //console.log(this.txt);
+                //console.log(this.id);
+                if(this.txt !== '' && this.txt.trim().length > 0){
+                    let vm = this;
+                    Toast({
+                        type: 'loading',
+                        message: '提交中...',
+                        duration: 0
+                    });
+                    this.axios({
+                        url: '/comment/commentIssue',
+                        method: 'post',
+                        data: {
+                            parentId: vm.id,
+                            userId: window.sessionStorage.getItem('userId'),
+                            content: vm.txt
+                        }
+                    }).then(function (res) {
+                        Toast.clear();
+                        if(res.data.code === 200){
+                            //console.log(res);
+                            vm.comment = res.data.data;
+                            Toast.success('评论成功');
+                        }else{
+                            Toast.fail(res.data.msg);
+                        }
+                    }).catch(function(err){
+                        Toast.clear();
+                        Toast.fail("故障啦");
+                    });
                     this.txt = '';
-                    Toast.success('评论成功');
+                    this.isShow = false;
                 }
             },
-            accept(){
+            accept(id){
+                let vm = this;
                 Dialog.confirm({
                     title: '提示',
                     message: '是否确认接单',
                 }).then(()=>{
                     //确认
-                    console.log('接单');
-                    Toast.success('接单成功');
+                    Toast({
+                       type: 'loading',
+                       message: '接单中...',
+                       duration: 0
+                    });
+                    this.axios({
+                        url: '/help/acceptHelp',
+                        method: 'get',
+                        params:{
+                            id: id,
+                            userId: vm.myId
+                        }
+                    }).then(function(res){
+                        vm.$emit("MyRefresh","");
+                        if(res.data.code === 200){
+                            Toast.success("接单成功");
+                        }else{
+                            Toast.fail("接单失败");
+                        }
+                    }).catch(function(err){
+                        Toast.clear();
+                        Toast.fail("故障啦");
+                    });
                 }).catch(()=>{
                     //取消
                 });
@@ -118,28 +184,61 @@
                 });
 
             },
+            deleted(id){
+                //console.log(id);
+                let vm = this;
+                Dialog.confirm({
+                    title: '提示',
+                    message: '是否确认删除?'
+                }).then(()=>{
+                    this.axios({
+                        url: '/help/deleteHelpById',
+                        method: 'get',
+                        params: {
+                            id: id
+                        }
+                    }).then(function (res) {
+                        if(res.data.code === 200){
+                            vm.$emit('MyRefresh','');//触发父组件函数
+                            Toast.success("已删除");
+                        }else{
+                            Toast.fail(res.data.msg);
+                        }
+                    }).catch(function(err){
+                        Toast.fail("故障啦");
+                    });
+                }).catch(()=>{
+
+                });
+            }
 
         },
         props:{
             id:{
+                type:Number
+            },
+            userId:{
+                type: String,
+            },
+            userImg:{
                 type:String,
-                default:'123'
+                default: GLOBAL.httpBaseUrl + "/userImg/defaultImg.jpg"
             },
             username:{
                 type:String,
-                default:'123'
+                default:''
             },
             helpThing:{
                 type: String,
-                default: '阿萨德加上'
+                default: ''
             },
             helpTime:{
                 type: String,
-                default: '上午12节'
+                default: ''
             },
             helpPlace:{
                 type: String,
-                default: '北门对面'
+                default: ''
             },
             helpTo:{
                 type: String,
@@ -151,15 +250,42 @@
             },
             helpDetail:{
                 type: String,
-                default: '阿斯达萨德安抚染发安抚安抚啊发发安抚大风歌大概是大法官大风歌大风歌对方大风歌'
+                default: ''
+            },
+            helpState:{
+                type: Number,
+                default: 0
+            },
+            acceptUserId:{
+                type: String,
+                default: ''
             },
             phone:{
                 type: String,
-                default: '1231234',
+                default: '',
+            },
+            photos:{
+                type: Array,
+                default: ()=>[]
+            },
+            createTime:{
+                type:String
             },
             comment:{
                 type: Array,
-                default: ()=>["阿萨德刚告诉对方","asdasdda","阿斯达萨德啊啊所多"]
+                default: ()=>[]
+            },
+            canAccept:{
+                type: Boolean,
+                default: false
+            },
+            canPhone:{
+                type: Boolean,
+                default: false
+            },
+            canShowIsAccept:{
+                type: Boolean,
+                default: false
             }
         }
     }
@@ -257,6 +383,15 @@
     width: 520px;
     height: 520px;
     background-color: #fff;
+  }
+
+  .showIsAccept{
+    float: left;
+    height: 60px;
+    line-height: 60px;
+    font-size: 40px;
+    margin-left: 2%;
+    color: red;
   }
 </style>
 
