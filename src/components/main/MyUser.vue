@@ -23,17 +23,17 @@
 
     <div class="myUserBody">
       <div id="password">
-        <div>
+        <div @click="toModifyPassword">
           <span>
           <i class="icon iconfont" style="color:#1296db;">&#xe604;</i>
         </span>
           <span id="passwordText" class="mySomeThings noBottomBorder">
             密&#9码
-            <span class="toSomeThings" @click="toModifyPassword"> > </span>
+            <span class="toSomeThings"> > </span>
           </span>
         </div>
       </div>
-      <div>
+      <div @click="toMyIdle">
         <span>
           <i class="icon iconfont" style="color:#1afa29;">&#xe605;</i>
         </span>
@@ -41,14 +41,22 @@
           闲&#9置
           <span class="toSomeThings"> > </span>
         </span>
-
       </div>
-      <div>
+      <div @click="toMyComment">
         <span>
           <i class="icon iconfont" style="color:#1296db">&#xe609;</i>
         </span>
         <span class="mySomeThings">
           提&#9问
+          <span class="toSomeThings"> > </span>
+        </span>
+      </div>
+      <div @click="toMyHelp">
+        <span>
+          <i class="icon iconfont" style="color:#1296db">&#xe609;</i>
+        </span>
+        <span class="mySomeThings">
+          帮&#9代
           <span class="toSomeThings"> > </span>
         </span>
       </div>
@@ -66,18 +74,36 @@
 </template>
 
 <script>
-  import GLOBAL from '../../api/global_variable'
+  import GLOBAL from '../../api/global_variable';
+  import {Toast} from 'vant';
     export default {
         name: "MyUser",
         data(){
             return{
-                userHeaderImg: GLOBAL.httpBaseUrl + "/userImg/defaultImg.jpg",
-                nickName: '哈哈哈哈',
-                userName: '15362941466'
+                userHeaderImg: '',
+                nickName: '',
+                userName: ''
             }
         },
         created(){
+            let userId = window.sessionStorage.getItem('userId');
+            this.userName = userId;
             //请求数据
+            let vm = this;
+            this.axios({
+                url: '/user/getNameAndHImg',
+                method: 'get',
+                params:{
+                    userId: userId
+                }
+            }).then(function (res) {
+                if(res.data.code === 200){
+                    vm.userHeaderImg = GLOBAL.httpBaseUrl + res.data.data.image;
+                    vm.nickName = res.data.data.nickName;
+                }else{
+                    Toast.fail(res.data.msg);
+                }
+            })
         },
         methods:{
             toDetail(){
@@ -91,6 +117,15 @@
                         userName: this.userName
                     }
                 });
+            },
+            toMyIdle(){
+                this.$router.push('/user/idle');
+            },
+            toMyComment(){
+                this.$router.push('/user/comment');
+            },
+            toMyHelp(){
+                this.$router.push('/user/myHelp');
             }
         }
     }
