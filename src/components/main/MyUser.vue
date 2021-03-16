@@ -70,6 +70,9 @@
         </span>
       </div>
     </div>
+    <div style="width: 80%;margin: 0 auto;">
+      <nut-button block shape="circle" @click="logout">退出登录</nut-button>
+    </div>
   </div>
 </template>
 
@@ -126,6 +129,38 @@
             },
             toMyHelp(){
                 this.$router.push('/user/myHelp');
+            },
+            logout(){
+                Toast({
+                    type: 'loading',
+                    message: '退出中...',
+                    duration: 0
+                });
+                let vm = this;
+                this.axios({
+                    url: '/user/logout',
+                    method: 'get',
+                }).then(function(res){
+                    Toast.clear();
+                    if(res.data.code === 200){
+                        Toast.success("退出");
+                        if(GLOBAL.webSocket !== null){
+                            GLOBAL.lockReconnect = true;
+                            GLOBAL.webSocket.close();
+                            clearTimeout(GLOBAL.webSocketTimeOutObj);
+                            clearTimeout(GLOBAL.webSocketServerTimeOutObj);
+                            GLOBAL.webSocket = null;
+                        }
+                        window.sessionStorage.clear();
+                        vm.$router.push("/login");
+                    }else{
+                        Toast.fail(res.data.msg);
+                    }
+                }).catch(function(err){
+                    Toast.clear();
+                    Toast.fail("故障啦");
+                });
+                // 发送请求 成功之后清空缓存
             }
         }
     }
@@ -173,7 +208,7 @@
   }
   .myUserBody{
     background-color: beige;
-    height: 80%;
+    height: 70%;
     width: 100%;
   }
   .myUserBody>div{
