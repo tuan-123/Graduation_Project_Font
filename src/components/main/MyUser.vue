@@ -79,6 +79,7 @@
 <script>
   import GLOBAL from '../../api/global_variable';
   import {Toast} from 'vant';
+  import {Dialog} from 'vant';
     export default {
         name: "MyUser",
         data(){
@@ -131,36 +132,42 @@
                 this.$router.push('/user/myHelp');
             },
             logout(){
-                Toast({
-                    type: 'loading',
-                    message: '退出中...',
-                    duration: 0
-                });
                 let vm = this;
-                this.axios({
-                    url: '/user/logout',
-                    method: 'get',
-                }).then(function(res){
-                    Toast.clear();
-                    if(res.data.code === 200){
-                        Toast.success("退出");
-                        if(GLOBAL.webSocket !== null){
-                            GLOBAL.lockReconnect = true;
-                            GLOBAL.webSocket.close();
-                            clearTimeout(GLOBAL.webSocketTimeOutObj);
-                            clearTimeout(GLOBAL.webSocketServerTimeOutObj);
-                            GLOBAL.webSocket = null;
+                Dialog.confirm({
+                    title: '提示',
+                    message: '确认退出?',
+                }).then(()=>{
+                    Toast({
+                        type: 'loading',
+                        message: '退出中...',
+                        duration: 0
+                    });
+                    vm.axios({
+                        url: '/user/logout',
+                        method: 'get',
+                    }).then(function(res){
+                        Toast.clear();
+                        if(res.data.code === 200){
+                            Toast.success("退出");
+                            if(GLOBAL.webSocket !== null){
+                                GLOBAL.lockReconnect = true;
+                                GLOBAL.webSocket.close();
+                                clearTimeout(GLOBAL.webSocketTimeOutObj);
+                                clearTimeout(GLOBAL.webSocketServerTimeOutObj);
+                                GLOBAL.webSocket = null;
+                            }
+                            window.sessionStorage.clear();
+                            vm.$router.push("/login");
+                        }else{
+                            Toast.fail(res.data.msg);
                         }
-                        window.sessionStorage.clear();
-                        vm.$router.push("/login");
-                    }else{
-                        Toast.fail(res.data.msg);
-                    }
-                }).catch(function(err){
-                    Toast.clear();
-                    Toast.fail("故障啦");
+                    }).catch(function(err){
+                        Toast.clear();
+                        Toast.fail("故障啦");
+                    });
+                }).catch(()=>{
+
                 });
-                // 发送请求 成功之后清空缓存
             }
         }
     }
