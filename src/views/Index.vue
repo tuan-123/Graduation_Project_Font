@@ -128,6 +128,7 @@
             },
             webSocketClose(){
                 console.log("socket已关闭");
+                GLOBAL.webSocket = null;
                 this.reconnect();
                 //手动清除
                 //this.clear();
