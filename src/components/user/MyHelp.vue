@@ -191,7 +191,7 @@
                 }).then(function (res) {
                     Toast.clear();
                     if(res.data.code === 200){
-                        //console.log(res);
+                        console.log(res);
                         if(res.data.data.helpVoList === null || res.data.data.helpVoList.length === 0){
                             vm.isEmpty = true;
                         }else {
@@ -207,6 +207,7 @@
                 }).catch(function (err) {
                     Toast.clear();
                     Toast.fail("故障啦");
+                    console.log(err);
                 });
             },
             myRefresh(value){
