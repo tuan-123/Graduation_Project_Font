@@ -26,7 +26,7 @@ import UserHelp from "../components/user/MyHelp";
 import LinkBlank from "../components/blankPage/Link";
 import FaceLogin from "../views/FaceLogin";
 import FinishFaceLogin from "../components/user/FinishFaceLogin";
-
+import Test from "../test/Test";
 
 
 
@@ -55,7 +55,10 @@ export default new Router({
 
 const router = new Router({
   routes: [
-
+    {
+      path:'/test',
+      component: Test
+    },
     {
       path: '/',
       redirect: '/login',
@@ -189,7 +192,7 @@ const router = new Router({
 });
 //挂载路由导航卫士
 router.beforeEach((to,from,next) => {
-  if(to.path === '/login' || to.path === '/register' || to.path === '/faceLogin'){
+  if(to.path === '/login' || to.path === '/register' || to.path === '/faceLogin' || to.path === '/test' || to.path === '/test2'){
     return next();
   }
   const tokenStr = window.sessionStorage.getItem('token');
