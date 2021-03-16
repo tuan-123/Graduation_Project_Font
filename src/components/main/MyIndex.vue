@@ -91,7 +91,7 @@
           <van-empty
             class="custom-image"
             :image="require('../../assets/img/custom-empty-image.png')"
-            description="描述文字"
+            description="空空如也"
           />
         </div>
       </div>
