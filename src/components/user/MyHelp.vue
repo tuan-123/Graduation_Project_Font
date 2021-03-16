@@ -24,7 +24,7 @@
       @pulldown="pulldown"
     >
       <div slot="list" class="nut-vert-list-panel">
-        <div class="content" v-for="(item,index) in listData" :key="index">
+        <div class="content" v-for="(item,index) in listData" :key="index" v-if="!isEmpty">
           <MyHelp
             @MyRefresh="myRefresh"
             :id="item.id"
@@ -48,6 +48,13 @@
             :can-show-is-accept="true"
           ></MyHelp>
         </div>
+        <div v-if="isEmpty">
+          <van-empty
+            class="custom-image"
+            :image="require('../../assets/img/custom-empty-image.png')"
+            description="空空如也"
+          />
+        </div>
       </div>
     </nut-scroller>
   </div>
@@ -68,7 +75,9 @@
                 page: 1,
                 maxPage: 1,
                 pageSize: 10,
-                timer: null
+                timer: null,
+
+                isEmpty: true,
 
             }
         },
@@ -148,9 +157,14 @@
                 }).then(function (res) {
                     if(res.data.code === 200){
                         vm.listData = [];
-                        vm.listData = res.data.data.helpVoList;
-                        vm.page = res.data.data.currentPage;
-                        vm.maxPage = res.data.data.pages;
+                        if(res.data.data.helpVoList === null || res.data.data.helpVoList.length === 0){
+                            vm.isEmpty = true;
+                        }else {
+                            vm.isEmpty = false;
+                            vm.listData = res.data.data.helpVoList;
+                            vm.page = res.data.data.currentPage;
+                            vm.maxPage = res.data.data.pages;
+                        }
                     }else{
                         Toast.fail("刷新失败");
                     }
@@ -178,9 +192,15 @@
                     Toast.clear();
                     if(res.data.code === 200){
                         //console.log(res);
-                        vm.listData = res.data.data.helpVoList;
-                        vm.page = res.data.data.currentPage;
-                        vm.maxPage = res.data.data.pages;
+                        if(res.data.data.helpVoList === null || res.data.data.helpVoList.length === 0){
+                            vm.isEmpty = true;
+                        }else {
+                            vm.isEmpty = false;
+                            vm.listData = res.data.data.helpVoList;
+                            vm.page = res.data.data.currentPage;
+                            vm.maxPage = res.data.data.pages;
+                        }
+
                     }else{
                         Toast.fail(res.data.msg);
                     }
@@ -205,13 +225,19 @@
                 }).then(function(res){
                     if(res.data.code === 200){
                         //console.log(res.data.data);
-                        vm.listData = res.data.data.helpVoList;
-                        // 向上整除
-                        let realPage = Math.ceil(res.data.data.total / vm.pageSize);
-                        if(vm.maxPage > realPage){
-                            vm.maxPage = realPage;
-                            vm.page = realPage;
+                        if(res.data.data.helpVoList === null || res.data.data.helpVoList.length === 0){
+                            vm.isEmpty = true;
+                        }else {
+                            vm.isEmpty = false;
+                            vm.listData = res.data.data.helpVoList;
+                            // 向上整除
+                            let realPage = Math.ceil(res.data.data.total / vm.pageSize);
+                            if(vm.maxPage > realPage){
+                                vm.maxPage = realPage;
+                                vm.page = realPage;
+                            }
                         }
+
                     }else{
                         Toast.fail(res.data.msg);
                     }
@@ -231,5 +257,8 @@
   .container .content{
     height: auto;
     background-color: skyblue;
+  }
+  .custom-image{
+    padding-top: 50%;
   }
 </style>
