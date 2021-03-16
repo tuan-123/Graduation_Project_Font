@@ -282,10 +282,15 @@
                             }
                         }).then(function(res){
                             if(res.data.code === 200){
-                                // 注意，concat方法连接两个数组，但不会改变原有数组。
-                                vm.commentObject = vm.commentObject.concat(res.data.data.askVoList);
-                                vm.page = res.data.data.currentPage;
-                                vm.maxPage = res.data.data.pages;
+                                if(res.data.data.askVoList === null || res.data.data.askVoList.length === 0){
+                                    vm.isEmpty = true;
+                                }else{
+                                    vm.isEmpty = false;
+                                    // 注意，concat方法连接两个数组，但不会改变原有数组。
+                                    vm.commentObject = vm.commentObject.concat(res.data.data.askVoList);
+                                    vm.page = res.data.data.currentPage;
+                                    vm.maxPage = res.data.data.pages;
+                                }
                             }else{
                                 Toast.fail("请求失败");
                             }
@@ -317,9 +322,14 @@
                 }).then(function (res) {
                     if(res.data.code === 200){
                         vm.commentObject = [];
-                        vm.commentObject = res.data.data.askVoList;
-                        vm.page = res.data.data.currentPage;
-                        vm.maxPage = res.data.data.pages;
+                        if(res.data.data.askVoList === null || res.data.data.askVoList.length === 0){
+                            vm.isEmpty = true;
+                        }else {
+                            vm.isEmpty = false;
+                            vm.commentObject = res.data.data.askVoList;
+                            vm.page = res.data.data.currentPage;
+                            vm.maxPage = res.data.data.pages;
+                        }
                     }else{
                         Toast.fail("刷新失败");
                     }
@@ -347,9 +357,14 @@
                     Toast.clear();
                     if(res.data.code === 200){
                         //console.log(res.data.data);
-                        vm.commentObject = res.data.data.askVoList;
-                        vm.page = res.data.data.currentPage;
-                        vm.maxPage = res.data.data.pages;
+                        if(res.data.data.askVoList === null || res.data.data.askVoList.length === 0){
+                            vm.isEmpty = true;
+                        }else {
+                            vm.isEmpty = false;
+                            vm.commentObject = res.data.data.askVoList;
+                            vm.page = res.data.data.currentPage;
+                            vm.maxPage = res.data.data.pages;
+                        }
 
                     }else{
                         Toast.fail(res.data.msg);
@@ -357,6 +372,7 @@
                 }).catch(function(err){
                     Toast.clear();
                     Toast.fail("故障啦");
+                    //console.log(err)
                 });
             },
             myRefresh(){
@@ -374,15 +390,20 @@
                     }
                 }).then(function(res){
                     if(res.data.code === 200){
-                        //console.log(res.data.data);
-                        vm.commentObject = res.data.data.askVoList;
-                        //vm.page = res.data.data.currentPage;
-                        //vm.maxPage = res.data.data.pages;
-                        // 向上整除
-                        let realPage = Math.ceil(res.data.data.total / vm.pageSize);
-                        if(vm.maxPage > realPage){
-                            vm.maxPage = realPage;
-                            vm.page = realPage;
+                        if(res.data.data.askVoList === null || res.data.data.askVoList.length === 0){
+                            vm.isEmpty = true;
+                        }else {
+                            vm.isEmpty = false;
+                            //console.log(res.data.data);
+                            vm.commentObject = res.data.data.askVoList;
+                            //vm.page = res.data.data.currentPage;
+                            //vm.maxPage = res.data.data.pages;
+                            // 向上整除
+                            let realPage = Math.ceil(res.data.data.total / vm.pageSize);
+                            if (vm.maxPage > realPage) {
+                                vm.maxPage = realPage;
+                                vm.page = realPage;
+                            }
                         }
 
                     }else{
