@@ -24,7 +24,7 @@
       @pulldown="pulldown2"
     >
       <div slot="list" class="nut-vert-list-panel">
-        <div v-for="(item,index) in listData" style="margin-bottom: 10px">
+        <div v-for="(item,index) in listData" style="margin-bottom: 10px" v-if="!isEmpty">
           <van-card
             :num="item.num"
             :price="item.price"
@@ -52,6 +52,13 @@
             </template>
           </van-card>
         </div>
+        <div v-if="isEmpty">
+          <van-empty
+            class="custom-image"
+            :image="require('../../assets/img/custom-empty-image.png')"
+            description="空空如也"
+          />
+        </div>
       </div>
     </nut-scroller>
   </div>
@@ -74,7 +81,9 @@
                 maxPage: 1,
                 pageSize: 10,
                 timer: null,
-                userId: window.sessionStorage.getItem('userId')
+                userId: window.sessionStorage.getItem('userId'),
+
+                isEmpty: false
             }
         },
         created(){
@@ -131,9 +140,14 @@
                             }
                         }).then(function(res){
                             if(res.data.code === 200){
-                                vm.listData = vm.listData.concat(res.data.data.idleBriefList);
-                                vm.page = res.data.data.currentPage;
-                                vm.maxPage = res.data.data.pages;
+                                if(res.data.data.idleBriefList === null || res.data.data.idleBriefList.length === 0){
+                                    vm.isEmpty = true;
+                                }else{
+                                    vm.isEmpty = false;
+                                    vm.listData = vm.listData.concat(res.data.data.idleBriefList);
+                                    vm.page = res.data.data.currentPage;
+                                    vm.maxPage = res.data.data.pages;
+                                }
                             }else{
                                 Toast.fail("请求失败");
                             }
@@ -165,9 +179,14 @@
                 }).then(function (res) {
                     if(res.data.code === 200){
                         vm.listData = [];
-                        vm.listData = res.data.data.idleBriefList;
-                        vm.page = res.data.data.currentPage;
-                        vm.maxPage = res.data.data.pages;
+                        if(res.data.data.idleBriefList === null || res.data.data.idleBriefList.length === 0){
+                            vm.isEmpty = true;
+                        }else {
+                            vm.isEmpty = false;
+                            vm.listData = res.data.data.idleBriefList;
+                            vm.page = res.data.data.currentPage;
+                            vm.maxPage = res.data.data.pages;
+                        }
                     }else{
                         Toast.fail("刷新失败");
                     }
@@ -195,9 +214,10 @@
                     Toast.clear();
                     if(res.data.code === 200){
                         //console.log(res);
-                        if(res.data.data.length === 0){
-                            Toast.fail("空空如也");
+                        if(res.data.data.idleBriefList === null || res.data.data.idleBriefList.length === 0){
+                            vm.isEmpty = true;
                         }else{
+                            vm.isEmpty = false;
                             //console.log(res.data.data);
                             vm.listData = res.data.data.idleBriefList;
                             vm.page = res.data.data.currentPage;
@@ -324,15 +344,20 @@
                     }
                 }).then(function(res){
                     if(res.data.code === 200){
-                        //console.log(res.data.data);
-                        vm.listData = res.data.data.idleBriefList;
-                        //vm.page = res.data.data.currentPage;
-                        //vm.maxPage = res.data.data.pages;
-                        // 向上整除
-                        let realPage = Math.ceil(res.data.data.total / vm.pageSize);
-                        if(vm.maxPage > realPage){
-                            vm.maxPage = realPage;
-                            vm.page = realPage;
+                        if(res.data.data.idleBriefList === null || res.data.data.idleBriefList.length === 0){
+                            vm.isEmpty = true;
+                        }else {
+                            vm.isEmpty = false;
+                            //console.log(res.data.data);
+                            vm.listData = res.data.data.idleBriefList;
+                            //vm.page = res.data.data.currentPage;
+                            //vm.maxPage = res.data.data.pages;
+                            // 向上整除
+                            let realPage = Math.ceil(res.data.data.total / vm.pageSize);
+                            if (vm.maxPage > realPage) {
+                                vm.maxPage = realPage;
+                                vm.page = realPage;
+                            }
                         }
                     }else{
                         Toast.fail(res.data.msg);
@@ -350,5 +375,8 @@
     background-color: red;
     width: 100%;
     height: 100%;
+  }
+  .custom-image{
+    padding-top: 50%;
   }
 </style>
