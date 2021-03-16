@@ -21,6 +21,7 @@
 </template>
 
 <script>
+  import GLOBAL from '../api/global_variable';
     export default {
         name: "Index",
         data(){
@@ -32,6 +33,7 @@
                     clicked: 'skyblue',
                     unClicked: ''
                 },
+                wsCreateHandler:'',
             }
         },
         created(){
@@ -43,6 +45,7 @@
             }else if(currentIndex === 2){
                 this.userColor = this.footer_click_color.clicked;
             }
+            this.createWebSocket(window.sessionStorage.getItem("userId"));
         },
         methods: {
             footer_clickIndex(){
@@ -69,7 +72,107 @@
                 this.appColor = this.footer_click_color.unClicked;
                 this.userColor = this.footer_click_color.clicked;
                 this.$router.push('/main/myUser');
-            }
+            },
+
+            createWebSocket(userId){
+                try{
+                    if(GLOBAL.webSocket === null){
+                        if('WebSocket' in window){
+                            GLOBAL.webSocket = new WebSocket("ws://localhost:8087/webSocket/" + userId);
+                        }else if('MozWebSocket' in window){
+                            GLOBAL.webSocket = new MozWebSocket("ws://localhost:8087/webSocket/" + userId);
+                        }else{
+                            GLOBAL.webSocket = new SocketJs("ws://localhost:8087/webSocket/" + userId);
+                        }
+                        this.init();
+                        GLOBAL.lockReconnect = false;
+                    }
+                }catch (e) {
+                    this.reconnect();
+                }
+            },
+            init(){
+                try {
+                    //监听socket连接
+                    GLOBAL.webSocket.onopen = this.webSocketOpen;
+                    //监听socket错误信息
+                    GLOBAL.webSocket.onerror = this.webSocketError;
+                    //监听socket消息
+                    GLOBAL.webSocket.onmessage = this.webSocketGetMessage;
+                    GLOBAL.webSocket.onclose = this.webSocketClose;
+                }catch (e) {
+                    this.reconnect();
+                }
+            },
+            webSocketOpen(){
+                console.log("socket连接成功");
+                this.start();
+                //this.sendMessage("嗯哼“);
+                //this.sendMessageToUserId("中午好",666)
+            },
+            webSocketError(){
+                console.log("socket连接错误");
+                this.reconnect();
+            },
+            webSocketGetMessage(msg){
+                console.log(msg);
+                //alert(msg.data);
+                this.start();
+            },
+            sendMessageToUserId(message,userId){
+                let data = {"fromUserId": this.userId, "toUserId": userId, "message": message};
+                GLOBAL.webSocket.send(JSON.stringify(data));
+            },
+            sendMessage(msg){
+                GLOBAL.webSocket.send(msg);
+            },
+            webSocketClose(){
+                console.log("socket已关闭");
+                this.reconnect();
+                //手动清除
+                //this.clear();
+            },
+
+
+            reconnect(){
+                if(GLOBAL.lockReconnect){
+                    return;
+                }
+                let vm = this;
+                console.log("1秒后重连");
+                GLOBAL.lockReconnect = true;
+                this.wsCreateHandler && clearTimeout(this.wsCreateHandler);
+                this.wsCreateHandler = setTimeout(function () {
+                    console.log("重连..."  + "假设这是url");
+                    vm.createWebSocket();
+                    GLOBAL.lockReconnect = false;
+                },1000)
+            },
+
+
+            //心跳检测
+            reset() {
+                clearTimeout(GLOBAL.webSocketTimeOutObj);
+                clearTimeout(GLOBAL.webSocketServerTimeOutObj);
+                this.start();
+            },
+            start() {
+                let vm = this;
+                GLOBAL.webSocketTimeOutObj && clearTimeout(GLOBAL.webSocketTimeOutObj);
+                GLOBAL.webSocketServerTimeOutObj && clearTimeout(GLOBAL.webSocketServerTimeOutObj);
+                GLOBAL.webSocketTimeOutObj = setTimeout(function () {
+                    console.log("发送ping到后台")
+                    try {
+                        GLOBAL.webSocket.send("ping");
+                    }catch (e) {
+                        console.log("发送ping异常");
+                    }
+                    GLOBAL.webSocketServerTimeOutObj = setTimeout(function () {
+                        console.log("没有收到后台的数据，关闭连接");
+                        vm.reconnect();
+                    },GLOBAL.webSocketTimeOut);
+                }, GLOBAL.webSocketTimeOut);
+            },
         }
     }
 </script>
