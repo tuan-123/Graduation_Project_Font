@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="header">
-      <span class="back" @click="toBack"> < </span>
+      <span class="back" @click="toBack">
+        <van-icon name="arrow-left" size="25"/>
+      </span>
       绑定学校
     </div>
     <div class="main">
@@ -129,12 +131,12 @@
 
 <style scoped>
   .container{
-    background-color: #5daf34;
+    /*background-color: #5daf34;*/
     width: 100%;
     height: 100%;
   }
   .header{
-    background-color: red;
+    background-color: #ffffff;
     /*height: 5%;*/
     height: 70px;
     width: 100%;
@@ -145,7 +147,7 @@
     text-align: center;
   }
   .main{
-    background-color: #3a8ee6;
+    background-color: #ededed;
     width: 100%;
     height: 92%;
   }

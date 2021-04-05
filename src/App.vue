@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <!-- 根据 .vue的name属性-->
+    <keep-alive :include="['Idle','MyIdle']">
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 

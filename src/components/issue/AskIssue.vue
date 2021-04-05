@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="header">
-      <span class="back" @click="toBack"> < </span>
+      <span class="back" @click="toBack">
+        <van-icon name="arrow-left" size="25"/>
+      </span>
       帮问发布
     </div>
     <div class="main">

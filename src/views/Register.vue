@@ -153,25 +153,21 @@
                         message: '发送中...',
                         duration: 0
                     });
-                    setTimeout(() => {
-                        Toast.clear();
-                    }, 3000);
                     this.axios({
                         url: '/user/sendEmailCode',
                         method: 'post',
-
                         params: {
                             email: vm.form.email,
                             phone: vm.form.name
                         }
 
                     }).then(function (response) {
-                        //console.log(response);
-                        clearTimeout();
+                        //console.log(response);、
                         Toast.clear();
-                        if(response.data.code == 200){
+                        if(response.data.code === 200){
                             vm.form.isInput = false;
                             vm.form.canClick = true;
+                            Toast.success("获取验证码成功");
                             vm.form.content = vm.form.totalTime + "s重新发送";
                             let clock = window.setInterval(() =>{
                                 vm.form.totalTime--;
@@ -188,7 +184,6 @@
                             vm.$message.error(response.data.msg);
                         }
                     }).catch(function (error) {
-                        clearTimeout();
                         Toast.clear();
                         Toast.fail("故障啦");
                     })
@@ -209,7 +204,7 @@
     font-size:60px
   }
   .register_container{
-    background: url("../assets/img/registerBackgroundImg.jpg");
+    background: url("../assets/img/registerBg.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     height: 100%;
@@ -243,7 +238,8 @@
 
   /deep/ .el-input__inner{
 
-    background: rgba(0,255,255,0.5);
+    background: rgba(255,255,255,0.5);
+
   }
 
   /*.btns .el-button{

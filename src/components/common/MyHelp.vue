@@ -9,7 +9,7 @@
     </div>
     <div class="text">
       <div style="float: right;" v-if="userId === myId">
-        <van-icon name="delete-o" size="0.7rem" color="yellow" @click="deleted(id)"/>
+        <van-icon name="delete-o" size="0.7rem" color="red" @click="deleted(id)"/>
       </div>
       <div class="user_name">
         {{username}}
@@ -58,11 +58,14 @@
         <div class="showIsAccept" v-if="canShowIsAccept" v-show="!isShow">
           {{helpState === 1 ? "已接单: " + acceptUserId : "未接单"}}
         </div>
+        <div style="float: left" v-if="canShowTimeAgo" v-show="!isShow">
+          {{getTime()}}
+        </div>
         <input class="comment_input" v-model="txt" v-show="isShow" placeholder="请输入评论内容">
         <van-button class="button" v-show="isShow" size="small" color="red" round @click="send">发送</van-button>
         </input>
         <div style="background-color: red">
-          <van-icon name="ellipsis" size="25" class="comment_click_icon" @click="showInput"></van-icon>
+          <van-icon name="ellipsis" size="25" class="comment_click_icon" @click="showInput(id)"></van-icon>
         </div>
         <div style="background-color: red" v-if="canAccept">
           <van-icon name="cart-o" size="25" class="comment_click_icon" @click="accept(id)" v-show="!isShow"></van-icon>
@@ -71,9 +74,9 @@
           <van-icon name="phone-o" size="25" class="comment_click_icon" @click="clickPhone" v-show="!isShow"></van-icon>
         </div>
       </div>
-      <div v-if="comment !== ''">
+      <div v-if="commentList !== ''">
         <div class="comment">
-          <div v-for="(item,i) in comment">
+          <div v-for="(item,i) in commentList">
             <span class="title">{{i+1}}楼:&#9 </span>
             <span>{{item.content}}</span>
           </div>
@@ -98,11 +101,18 @@
                 /*show: false,*/
                 txt:'',
                 myId: window.sessionStorage.getItem('userId'),
+                commentList: this.comment,
+            }
+        },
+        watch: {
+            comment(newValue,oldValue){
+                this.commentList = newValue;
             }
         },
         methods:{
-            showInput(){
-                this.isShow = !this.isShow;
+            showInput(id){
+                //this.isShow = !this.isShow;
+                this.$emit("MyCommentInput",id);
             },
             send(){
                 this.isShow = false;
@@ -141,6 +151,7 @@
                 }
             },
             accept(id){
+                this.$emit("MyCloseCommentInput");
                 let vm = this;
                 Dialog.confirm({
                     title: '提示',
@@ -177,6 +188,7 @@
             clickPhone(){
                 //this.show = !this.show;
                 //console.log(this.phone);
+                this.$emit("MyCloseCommentInput");
                 Dialog.alert({
                     message: this.phone
                 }).then(()=>{
@@ -186,6 +198,7 @@
             },
             deleted(id){
                 //console.log(id);
+                this.$emit("MyCloseCommentInput");
                 let vm = this;
                 Dialog.confirm({
                     title: '提示',
@@ -210,6 +223,9 @@
                 }).catch(()=>{
 
                 });
+            },
+            getTime(){
+                return this.timeAgo(this.createTime);
             }
 
         },
@@ -286,8 +302,12 @@
             canShowIsAccept:{
                 type: Boolean,
                 default: false
+            },
+            canShowTimeAgo:{
+                type: Boolean,
+                default: true
             }
-        }
+        },
     }
 </script>
 
@@ -297,12 +317,15 @@
     width: 96%;
     margin-left: 2%;
     height: auto;
-    border: solid 1px red;
+    border-bottom: solid 1px #ededed;
   }
   .header_img{
+    padding-top: 20px;
     float: left;
   }
   .text{
+    padding-top: 20px;
+    padding-bottom: 20px;
     width: 87%;
     margin-left: 13%;
     /*border: solid 1px yellow;*/
@@ -311,7 +334,7 @@
     /*background-color: #795da3;*/
     font-size: 40px;
     font-family: SimHei;
-    color:red;
+    color:dodgerblue;
   }
   .text .content{
     margin-top: 5px;
@@ -319,29 +342,29 @@
     font-size:35px;
   }
   .text .comment{
-    background-color: #5daf34;
+    background-color: #ededed;
     font-size:33px;
     margin-bottom: 10px;
   }
   .text .comment>div{
-    background-color: #795da3;
+    background-color: #efefef;
     width: 96%;
     margin-left: 2%;
   }
   .title{
-    color:red;
+    color:dodgerblue;
     font-size: 33px;
   }
   .comment_click{
     padding-top: 2%;
-    background-color: #5daf34;
+    background-color: #ffffff;
     height: 60px;
     line-height: 60px;
   }
   .comment_click_icon{
     margin-right: 2%;
     float:right;
-    background-color: red
+    background-color: #ffffff;
   }
   .comment_input{
     margin-left: 2%;
@@ -349,7 +372,7 @@
     width: 70%;
     height: 50px;
     line-height: 50px;
-    background-color: yellow;
+    background-color: skyblue;
     border: 0;
     font-size: 30px;
   }

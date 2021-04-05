@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="header">
-      <span class="back" @click="toBack"> < </span>
+      <span class="back" @click="toBack">
+        <van-icon name="arrow-left" size="25"/>
+      </span>
       更改昵称
       <span class="btn">
         <!--<input type="button" value="保存"/>-->
@@ -31,8 +33,8 @@
         </van-cell-group>
       </div>
       <span>好名字可以让你的朋友更容易记住你</span>
-      <div class="saveBtn" @click="saveNickName">
-        <van-button type="primary" text="保存"/>
+      <div class="saveBtn">
+        <van-button type="primary" @click="saveNickName">保 存</van-button>
       </div>
     </div>
   </div>
@@ -108,11 +110,11 @@
             focusMethod(){
                 let inp = document.getElementsByClassName("nickNameInput")[0];
                 //console.log(inp)
-                inp.style.borderBottomColor = "#FFFFFF";
+                inp.style.borderBottomColor = "#00ff00";
             },
             blurMethod(){
                 let inp = document.getElementsByClassName("nickNameInput")[0];
-                inp.style.borderBottomColor = "red";
+                inp.style.borderBottomColor = "#ffffff";
             }
 
         }
@@ -121,12 +123,12 @@
 
 <style scoped>
   .container{
-    background-color: #5daf34;
+    /*background-color: #5daf34;*/
     width: 100%;
     height: 100%;
   }
   .header{
-    background-color: red;
+    background-color: #ededed;
     height: 70px;
     width: 100%;
     font-size: 40px;
@@ -136,7 +138,7 @@
     text-align: center;
   }
   .main{
-    background-color: #3a8ee6;
+    background-color: #ffffff;
     width: 100%;
     height: 92%;
   }
@@ -159,13 +161,13 @@
     border: 0;
     border-bottom: solid 5px red;
   }*/
-  .main span{
+  .main>span{
     padding-left: 10%;
     font-size: 30px;
-    color: chartreuse;
+    color: skyblue;
   }
   .main .nickNameInput{
-    border-bottom: solid 2px red;
+    border-bottom: solid 2px #ffffff;
     width: 80%;
     margin-left: 10%;
     padding-top: 10%;
@@ -174,7 +176,7 @@
     display: block;
     width: 100%;
     text-align: center;
-    padding-top: 20%;
+    padding-top: 10%;
   }
 
 </style>

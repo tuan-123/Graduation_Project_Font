@@ -36,8 +36,8 @@
             this.backUrl = this.$route.params.backUrl;
             this.id = this.$route.params.id;
             Toast({
-               title: 'loading',
-               message: '获取中...',
+                type: 'loading',
+                message: '获取中...',
                 duration: 0
             });
             this.axios({

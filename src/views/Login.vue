@@ -3,7 +3,7 @@
     <div class="login_box">
       <!--头像区-->
       <div class="avater_box">
-        <img src="../assets/img/loginImg.jpeg" alt="">
+        <img src="../assets/img/myLogo.png" alt="">
       </div>
       <!--登录表单区域-->
       <el-form ref="form" :model="form" :rules="rules" label-width="0px" class="login_form">
@@ -32,7 +32,7 @@
         </div>
 
         <div style="margin-top: 20px">
-          <div style="text-align:center;color: #8c939d">---------------其他方式---------------</div>
+          <div style="text-align:center;color: black">---------------其他方式---------------</div>
           <div style="text-align: center;margin-top: 10px">
             <van-icon name="smile" size="1.2rem" color="yellow" @click="clickFaceLogin"/>
           </div>
@@ -180,9 +180,11 @@
     top:50%;
     transform: translate(-50%,-50%);
   }
+
+  /*   .login_box .avater_box    与  .login_box .avater_box img   换成一下两个
   .login_box .avater_box {
-    height:250px;
-    width: 250px;
+    height:230px;
+    width: 230px;
     border: 1px solid #eee;
     border-radius: 50%;
     padding: 10px;
@@ -197,9 +199,31 @@
     height: 100%;
     border-radius: 50%;
   }
+  */
+
+  .login_box .avater_box {
+    height:230px;
+    width: 230px;
+    /*border: 1px solid #eee;*/
+    border-radius: 50%;
+    padding: 10px;
+    /*box-shadow: 0 0 10px #ddd;*/
+    position: relative;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    /*background-color: #fff;*/
+  }
+  .login_box .avater_box img {
+    width: 100%;
+    height: 100%;
+    /*border-radius: 50%;*/
+  }
+
+
+
 
   .login_container{
-    background-image: url("../assets/img/loginBackground.jpg");
+    background-image: url("../assets/img/loginBackground.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     height: 100%;

@@ -41,6 +41,7 @@
           :can-accept="false"
           :can-phone="true"
           :can-show-is-accept="false"
+          :can-show-time-ago="true"
         ></MyHelp>
       </div>
       <div v-if="isEmpty">
@@ -56,8 +57,8 @@
         style="
               color: rgb(255, 255, 255);
               display: flex;
-              height: 44px;
-              width: 44px;
+              height: 32px;
+              width: 32px;
               align-items: center;
               justify-content: center;"
         @click="backToTop"><van-image :src="require('../../assets/img/backToTop.png')"></van-image></div>

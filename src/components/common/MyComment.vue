@@ -9,7 +9,7 @@
     </div>
     <div class="text">
       <div style="float: right;" v-if="userId === myId">
-        <van-icon name="delete-o" size="0.7rem" color="yellow" @click="deleted(id)"/>
+        <van-icon name="delete-o" size="0.7rem" color="red" @click="deleted(id)"/>
       </div>
       <div class="user_name">
         {{username}}
@@ -29,11 +29,11 @@
         />
       </div>
       <div class="comment_click">
-        <input class="comment_input" v-model="txt" v-show="isShow" placeholder="请输入评论内容">
-          <van-button class="button" v-show="isShow" size="small" color="red" round @click="send">发送</van-button>
-        </input>
+        <input class="comment_input" v-model="txt" v-show="isShow" placeholder="请输入评论内容"/>
+        <van-button class="button" v-show="isShow" size="small" color="red" round @click="send">发送</van-button>
+        <div style="float: left">{{getTime()}}</div>
         <div style="background-color: red">
-          <van-icon name="ellipsis" size="20" class="comment_click_icon" @click="showInput"></van-icon>
+          <van-icon name="ellipsis" size="20" class="comment_click_icon" @click="showInput(id)"></van-icon>
         </div>
       </div>
       <div v-if="commentList !== ''">
@@ -70,8 +70,9 @@
             }
         },
         methods:{
-            showInput(){
-                this.isShow = !this.isShow;
+            showInput(id){
+                //this.isShow = !this.isShow;
+                this.$emit("MyCommentInput",id);
             },
             send(){
                 let vm = this;
@@ -107,10 +108,14 @@
                     });
                     this.txt = '';
                     this.isShow = false;
+                }else{
+                    this.txt = '';
+                    this.isShow = false;
                 }
             },
             deleted(id){
                 //console.log(id);
+                this.$emit("MyCloseCommentInput");
                 let vm = this;
                 Dialog.confirm({
                     title: '提示',
@@ -135,7 +140,10 @@
                 }).catch(()=>{
 
                 });
-            }
+            },
+            getTime(){
+                return this.timeAgo(this.createTime);
+            },
         },
         props:{
             id:{
@@ -179,16 +187,19 @@
 
 <style scoped>
   .interactive_container{
-    margin-top: 20px;
+    margin-top: 10px;
     width: 96%;
     margin-left: 2%;
     height: auto;
-    border: solid 1px red;
+    /*border: solid 1px red;*/
   }
   .header_img{
+    padding-top: 20px;
     float: left;
   }
   .text{
+    padding-top: 20px;
+    padding-bottom: 20px;
     width: 87%;
     margin-left: 13%;
     /*border: solid 1px yellow;*/
@@ -197,7 +208,7 @@
     /*background-color: #795da3;*/
     font-size: 40px;
     font-family: SimHei;
-    color:red;
+    color:dodgerblue;
   }
   .text .content{
     margin-top: 5px;
@@ -205,29 +216,29 @@
     font-size:35px;
   }
   .text .comment{
-    background-color: #5daf34;
+    background-color: #efefef;
     font-size:33px;
     margin-bottom: 10px;
   }
   .text .comment>div{
-    background-color: #795da3;
+    background-color: #efefef;
     width: 96%;
     margin-left: 2%;
   }
   .title{
-    color:red;
+    color:dodgerblue;
     font-size: 33px;
   }
   .comment_click{
     padding-top: 2%;
-    background-color: #5daf34;
+    background-color: #ffffff;
     height: 60px;
     line-height: 60px;
   }
   .comment_click_icon{
     margin-right: 2%;
     float:right;
-    background-color: red
+    background-color: #ffffff;
   }
   .comment_input{
     margin-left: 2%;
@@ -235,7 +246,7 @@
     width: 70%;
     height: 50px;
     line-height: 50px;
-    background-color: yellow;
+    background-color: skyblue;
     border: 0;
     font-size: 30px;
   }

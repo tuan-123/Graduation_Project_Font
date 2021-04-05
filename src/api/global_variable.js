@@ -1,5 +1,12 @@
-const httpBaseUrl = 'http://127.0.0.1:8087';
-//const httpBaseUrl = 'http://192.168.2.104:8087';
+import {createNameEach} from "echarts/src/component/dataZoom/helper";
+
+//const httpBaseUrl = 'http://127.0.0.1:8087';
+const httpBaseUrl = 'http://192.168.43.143:8087';
+
+//const webSocketUrl = 'ws://127.0.0.1:8087/webSocket/';
+const webSocketUrl = 'ws://192.168.43.143:8087/webSocket/';
+
+
 const footerCurrentClicked = 0;
 
 const webSocket = null;
@@ -16,4 +23,5 @@ export default {
   webSocketServerTimeOutObj,
   webSocketTimeOut,
   lockReconnect,
+  webSocketUrl,
 }

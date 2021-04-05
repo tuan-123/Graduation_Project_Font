@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="header">
-      <span class="back" @click="toBack"> < </span>
+      <span class="back" @click="toBack">
+        <van-icon name="arrow-left" size="25"/>
+      </span>
         个人信息
     </div>
     <div class="main">
@@ -52,7 +54,8 @@
 
           <span class="floatRight">
             {{nickName}}
-            <span>&#9></span></span>
+            <span>&#9<nut-icon type="right" class="rightIcon" ></nut-icon></span>
+          </span>
         </div>
         <div>
           <span>账&#9号</span>
@@ -70,21 +73,21 @@
           <span>学&#9校</span>
           <span class="floatRight" :style="{color:schoolNameColor}">
             {{schoolName}}
-            <span v-show="toSelectSchool">&#9></span>
+            <span v-show="toSelectSchool">&#9<nut-icon type="right" class="rightIcon" ></nut-icon></span>
           </span>
         </div>
         <div @click="finishNum">
           <span>学&#9号</span>
           <span class="floatRight" :style="{color:numColor}">
             {{num}}
-            <span v-show="toFinishNum">&#9></span>
+            <span v-show="toFinishNum">&#9<nut-icon type="right" class="rightIcon"></nut-icon></span>
           </span>
         </div>
         <div @click="finishFaceLogin">
           <span>人脸登录</span>
           <span class="floatRight" :style="{color:faceLoginColor}">
             {{faceLogin}}
-            <span v-show="toFinishFaceLogin">&#9></span>
+            <span v-show="toFinishFaceLogin">&#9<nut-icon type="right" class="rightIcon" ></nut-icon></span>
           </span>
         </div>
 
@@ -97,6 +100,7 @@
 <script>
   import GLOBAL from '../../api/global_variable';
   import {Toast} from 'vant';
+  import {Dialog} from 'vant';
     export default {
         name: "MyDetail",
         data(){
@@ -123,7 +127,7 @@
                 userImg: ''
             }
         },
-        created(){
+        mounted(){
             let userId = window.sessionStorage.getItem('userId');
             this.userId = userId;
             let vm = this;
@@ -147,14 +151,14 @@
                        vm.schoolName = "未绑定";
                        vm.schoolNameColor = '#808A87';
                    }else{
-                       vm.schoolNameColor = '#FFAAFF';
+                       vm.schoolNameColor = 'skyblue';
                        vm.toSelectSchool = false;
                    }
                    if(vm.num === '-1'){
                        vm.num = "未绑定";
                        vm.numColor = '#808A87';
                    }else{
-                       vm.numColor = '#FFAAFF';
+                       vm.numColor = 'skyblue';
                        vm.toFinishNum = false;
                    }
                    if(vm.faceLogin === 0){
@@ -208,13 +212,53 @@
 
             },
             selectSchool(){
-                this.$router.push("/user/finishSchool");
+                if(this.toSelectSchool) {
+                    this.$router.push("/user/finishSchool");
+                }
             },
             finishNum(){
-                this.$router.push("/user/finishNum");
+                if(this.toFinishNum) {
+                    this.$router.push("/user/finishNum");
+                }
             },
             finishFaceLogin(){
-                this.$router.push("/user/finishFaceLogin");
+                let vm = this;
+                if(this.toFinishFaceLogin){
+                    this.$router.push("/user/finishFaceLogin");
+                }else{
+                    Dialog.confirm({
+                        title:'提示',
+                        message: '是否关闭人脸登录?'
+                    }).then(()=>{
+                        Toast({
+                            type:'loading',
+                            message:'关闭中',
+                            duration: 0,
+                        });
+                        this.axios({
+                            url:"/user/closeFaceLogin",
+                            method:"get",
+                            params:{
+                                userId: window.sessionStorage.getItem('userId')
+                            }
+                        }).then(function(res){
+                            Toast.clear();
+                            if(res.data.code === 200){
+                                vm.faceLogin = "未开启";
+                                vm.faceLoginColor = '#808A87';
+                                vm.toFinishFaceLogin = true;
+                                Toast.success("已关闭");
+                            }else{
+                                Toast.fail(res.data.msg);
+                            }
+                        }).catch(function (err) {
+                            Toast.clear();
+                            Toast.fail("故障啦，" + err);
+                        })
+                    }).catch(()=>{
+
+                    });
+                }
             },
             /*afterRead(file){
                 //console.log(file);
@@ -273,12 +317,12 @@
 
 <style scoped>
   .container{
-    background-color: #5daf34;
+    background-color: #ededed;
     width: 100%;
     height: 100%;
   }
   .header{
-    background-color: red;
+    background-color: #ededed;
     height: 5%;
     width: 100%;
     font-size: 40px;
@@ -288,7 +332,7 @@
     text-align: center;
   }
   .main{
-    background-color: #3a8ee6;
+    background-color: #ededed;
     width: 100%;
     height: 92%;
   }
@@ -301,19 +345,22 @@
     float:left;
   }
   .main>div{
-    background-color: #795da3;
-    position: relative;
-    left: 4%;
-    width: 92%;
+    background-color: #ededed;
+    /*position: relative;*/
+    /*padding-left: 4%;*/
+    /*width: 92%;*/
+    width: 100%;
     height: 100%;
 
   }
   .main>div div{
-    background-color: #9a6e3a;
+    background-color: #ffffff;
     height: 100px;
     line-height: 100px;
     font-size: 35px;
-    border-bottom: solid 1px #13ce66;
+    border-bottom: solid 1px #dfdfdf;
+    padding-left: 4%;
+    padding-right: 4%;
   }
   .main>div .img{
     height: 150px;
@@ -324,6 +371,7 @@
     display: block;
     float: right;
     margin-top: 15px;
+    padding-right: 4%;
   }
   .main>div div .floatRight{
     float: right;
@@ -340,6 +388,10 @@
     height: 90px;
     border: 0;
   }
-
-
+  .rightIcon{
+    position: relative;
+    right: -15px;
+    line-height: 30px;
+    height: 30px;
+  }
 </style>

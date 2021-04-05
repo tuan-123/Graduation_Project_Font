@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="header">
-      <span class="back" @click="toBack"> < </span>
+      <span class="back" @click="toBack">
+        <van-icon name="arrow-left" size="25"/>
+      </span>
       绑定学号
     </div>
     <div class="main">
@@ -126,11 +128,11 @@
             },
             focusMethod(){
                 let inp = document.getElementsByClassName("numInput")[0];
-                inp.style.borderBottomColor = "#FFFFFF";
+                inp.style.borderBottomColor = "#00ff00";
             },
             blurMethod(){
                 let inp = document.getElementsByClassName("numInput")[0];
-                inp.style.borderBottomColor = "red";
+                inp.style.borderBottomColor = "#ffffff";
             }
         }
     }
@@ -138,12 +140,12 @@
 
 <style scoped>
   .container{
-    background-color: #5daf34;
+    /*background-color: #5daf34;*/
     width: 100%;
     height: 100%;
   }
   .header{
-    background-color: red;
+    background-color: #ededed;
     /*height: 5%;*/
     height: 70px;
     width: 100%;
@@ -154,7 +156,7 @@
     text-align: center;
   }
   .main{
-    background-color: #3a8ee6;
+    background-color: #ffffff;
     width: 100%;
     height: 92%;
   }
@@ -200,7 +202,7 @@
     padding-top: 15%;
   }
   .main .numInput{
-    border-bottom: solid 2px red;
+    border-bottom: solid 2px #ffffff;
     width: 80%;
     margin-left: 10%;
     padding-top: 10%;

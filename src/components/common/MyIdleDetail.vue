@@ -42,10 +42,10 @@
       </div>
       <nut-popup v-model="show" round position="bottom" closeable class="popup">{{phone}}</nut-popup>
     </div>
-    <div class="comment" v-if="commentList.length > 0">
+    <div class="comment" v-if="comment.length > 0">
       <!--评论内容 在 content属性里-->
-      <div v-for="(item,index) in commentList">
-        <span style="color:red">{{index + 1}}楼:&#9</span>
+      <div v-for="(item,index) in comment">
+        <span style="color:dodgerblue">{{index + 1}}楼:&#9</span>
         <span>{{item.content}}</span>
       </div>
     </div>
@@ -59,7 +59,7 @@
         />
         </span>
       <span style="display: inline-block;float:left;width: 20%">
-          <van-button round color="red" @click="comment">评论</van-button>
+          <van-button round color="red" @click="submitComment">评论</van-button>
         </span>
     </div>
   </div>
@@ -75,7 +75,13 @@
                 httpBaseUrl: GLOBAL.httpBaseUrl,
                 inputValue: '',
                 showCommentInput: false,
-                show:false
+                show:false,
+                comment: this.commentList,
+            }
+        },
+        watch: {
+            commentList(newVal,oldVal){
+                this.comment = newVal;
             }
         },
         props:{
@@ -130,7 +136,7 @@
             clickStar(){
                 Toast.fail("还未开发");
             },
-            comment(){
+            submitComment(){
                 //判断是否为空串或纯为空格
                 if(this.inputValue !== '' && this.inputValue.trim().length > 0){
                     let vm = this;
@@ -196,7 +202,7 @@
     width: 94%;
     margin-left: 3%;
     padding: 10px 0px;
-    background-color: whitesmoke;
+    background-color: skyblue;
   }
   .content .priceSymbol{
     color: red;
@@ -233,7 +239,7 @@
     height: auto;
     margin-left: 3%;
     border-radius: 3%;
-    background-color: skyblue;
+    background-color: #ededed;
     padding-top: 10px;
     padding-bottom: 15px;
   }
@@ -245,7 +251,7 @@
     padding-right: 15px;
   }
   .content .icon{
-    background-color: yellow;
+    background-color: skyblue;
     height: 35px;
     width: 94%;
   }

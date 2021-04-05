@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="header">
-      <span class="back" @click="toBack"> < </span>
+      <span class="back" @click="toBack">
+        <van-icon name="arrow-left" size="25"/>
+      </span>
       修改密码
     </div>
     <div class="main">
@@ -101,6 +103,7 @@
 <script>
     import {Dialog} from 'vant';
     import {Toast} from 'vant';
+    import GLOBAL from "../../api/global_variable";
 
     /*var currentPasswordElement = document.getElementsByClassName("el-input");*/
   export default {
@@ -258,9 +261,6 @@
                           message: '提交中...',
                           duration: 0
                       });
-                      setTimeout(() => {
-                          Toast.clear();
-                      }, 3000);
                       this.axios({
                           url: '/user/updatePassword',
                           method: 'post',
@@ -270,17 +270,22 @@
                               newPassword: value.newPassword
                           }
                       }).then(function (res) {
-                          clearTimeout();
                           Toast.clear();
                           if(res.data.code === 200){
                               Toast.success("修改成功，请重新登录");
+                              if(GLOBAL.webSocket !== null){
+                                  GLOBAL.lockReconnect = true;
+                                  GLOBAL.webSocket.close();
+                                  clearTimeout(GLOBAL.webSocketTimeOutObj);
+                                  clearTimeout(GLOBAL.webSocketServerTimeOutObj);
+                                  GLOBAL.webSocket = null;
+                              }
                               window.sessionStorage.clear();
                               vm.$router.push("/login");
                           }else{
                               Toast.fail(res.data.msg);
                           }
                       }).catch(function (error) {
-                          clearTimeout();
                           Toast.clear();
                           Toast.fail("故障啦");
                       })
@@ -298,12 +303,12 @@
 
 <style scoped>
   .container{
-    background-color: #5daf34;
+    /*background-color: #5daf34;*/
     width: 100%;
     height: 100%;
   }
   .header{
-    background-color: red;
+    background-color: #ffffff;
     /*height: 5%;*/
     height: 70px;
     width: 100%;
@@ -314,7 +319,7 @@
     text-align: center;
   }
   .main{
-    background-color: #3a8ee6;
+    background-color: #ededed;
     width: 100%;
     height: 92%;
     font-size: 35px;
@@ -356,7 +361,7 @@
   }*/
   .main .userName{
     width: 90%;
-    border-bottom: solid 1px mediumvioletred;
+    border-bottom: solid 1px greenyellow;
     padding-top: 50px;
     margin-bottom: 20px;
     margin-left: 4%;

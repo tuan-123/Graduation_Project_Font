@@ -469,12 +469,12 @@
   .container{
     width: 100%;
     height: 100%;
-    background-color: gray;
+    background-color: #ededed;
   }
   .container .header{
     width: 100%;
     height: 100px;
-    background-color: red;
+    background-color: #ffffff;
     font-size: 40px;
     text-align: center;
     line-height: 100px;

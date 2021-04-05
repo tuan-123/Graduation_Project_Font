@@ -15,7 +15,7 @@
       <div class="content">
         <div class="nickName">
           {{nickName}}
-          <span class="more" @click="toDetail"> > </span>
+          <span class="more" @click="toDetail"><van-icon name="arrow" size="25"/></span>
         </div>
         <div class="userName">账号: {{userName}}</div>
       </div>
@@ -29,7 +29,9 @@
         </span>
           <span id="passwordText" class="mySomeThings noBottomBorder">
             密&#9码
-            <span class="toSomeThings"> > </span>
+            <span class="toSomeThings">
+              <nut-icon type="right" class="rightIcon" ></nut-icon>
+            </span>
           </span>
         </div>
       </div>
@@ -39,7 +41,9 @@
         </span>
         <span class="mySomeThings">
           闲&#9置
-          <span class="toSomeThings"> > </span>
+          <span class="toSomeThings">
+            <nut-icon type="right" class="rightIcon" ></nut-icon>
+          </span>
         </span>
       </div>
       <div @click="toMyComment">
@@ -48,25 +52,31 @@
         </span>
         <span class="mySomeThings">
           提&#9问
-          <span class="toSomeThings"> > </span>
+          <span class="toSomeThings">
+            <nut-icon type="right" class="rightIcon" ></nut-icon>
+          </span>
         </span>
       </div>
       <div @click="toMyHelp">
         <span>
-          <i class="icon iconfont" style="color:#1296db">&#xe609;</i>
+          <i class="icon iconfont" style="color:lawngreen">&#xe65e;</i>
         </span>
         <span class="mySomeThings">
           帮&#9代
-          <span class="toSomeThings"> > </span>
+          <span class="toSomeThings">
+            <nut-icon type="right" class="rightIcon" ></nut-icon>
+          </span>
         </span>
       </div>
-      <div>
+      <div @click="toMyAcceptHelp">
         <span>
           <i class="icon iconfont" style="color:#f3ca7e">&#xe606;</i>
         </span>
         <span class="mySomeThings noBottomBorder">
-          收&#9藏
-          <span class="toSomeThings"> > </span>
+          我&#9的&#9接&#9单
+          <span class="toSomeThings">
+            <nut-icon type="right" class="rightIcon" ></nut-icon>
+          </span>
         </span>
       </div>
     </div>
@@ -168,6 +178,9 @@
                 }).catch(()=>{
 
                 });
+            },
+            toMyAcceptHelp(){
+                this.$router.push("/user/myAcceptHelp");
             }
         }
     }
@@ -176,7 +189,7 @@
 
 <style scoped>
   .myUserHeader{
-    background-color: whitesmoke;
+    background-color: #ffffff;
     height: 20%;
     width: 100%;
   }
@@ -214,7 +227,7 @@
     width: 100%;
   }
   .myUserBody{
-    background-color: beige;
+    background-color: #ededed;
     height: 70%;
     width: 100%;
   }
@@ -230,7 +243,7 @@
     font-size: 40px;
   }
   .myUserBody #password{
-    background-color: #13ce66; /*得跟大背景颜色一样*/
+    background-color: #ededed; /*得跟大背景颜色一样*/
     height: 120px;
     margin-bottom: 20px;
     padding-left: 0;
@@ -239,7 +252,7 @@
   #password>div{
     position: relative;
     top: 20px;
-    background-color: skyblue;
+    background-color: #ffffff;
     height: 100px;
     padding-left: 5%;
   }
@@ -247,7 +260,7 @@
     display: inline-block;
     width: 80%;
     margin-left: 4%;
-    border-bottom: solid 1px red;
+    border-bottom: solid 1px #dfdfdf;
   }
   .noBottomBorder{
     border-bottom: 0;
@@ -256,5 +269,10 @@
     font-size: 35px;
     float: right;
   }
-
+  .rightIcon{
+    position: relative;
+    right: -25px;
+    line-height: 30px;
+    height: 30px;
+  }
 </style>

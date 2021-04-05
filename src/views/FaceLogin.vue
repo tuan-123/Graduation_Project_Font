@@ -1,7 +1,8 @@
 <template>
   <div class="container">
-    <div style="position: absolute;top:10px;left:10px;z-index: 10">
-      <van-icon size="25" name="arrow-left" @click="back"/>
+    <div class="header">
+      <van-icon style="position: absolute;top:10px;left:10px;z-index: 10" size="25" name="arrow-left" @click="back"/>
+      <span>人脸采集</span>
     </div>
     <div class="vanUploader">
       <van-uploader
@@ -32,9 +33,9 @@
                 if(file.type.indexOf("image") === -1){
                     Toast.fail("非图片");
                     return false;
-                }else if(file.size > 5242880){
-                    Toast.fail("图片不能超过5兆");
-                    return false
+                }else if(file.size > 52428800){
+                    Toast.fail("图片不能超过50兆");
+                    return false;
                 }
                 return true;
             },
@@ -59,9 +60,9 @@
                     // console.log(res);
                     Toast.clear();
                     if(res.data.code === 200){
+                        Toast.success('登录成功');
                         window.sessionStorage.setItem('userId',res.data.data.phone);
                         window.sessionStorage.setItem('token',res.data.token)
-                        Toast.success('登录成功');
                         vm.$router.push("/index");
                     }else{
                         Toast.fail(res.data.msg);
@@ -85,5 +86,14 @@
     text-align: center;
     position: relative;
     top: 30%;
+  }
+  .container .header{
+    width:100%;
+    text-align: center;
+    height: 70px;
+    font-size: 40px;
+    font-family: SimHei;
+    padding-top: 4%;
+    font-weight: bold;
   }
 </style>

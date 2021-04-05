@@ -36,7 +36,7 @@
                 wsCreateHandler:'',
             }
         },
-        created(){
+        mounted(){
             var currentIndex = this.$route.params.currentIndex;
             if(currentIndex === undefined || currentIndex === 0){
                 this.indexColor = this.footer_click_color.clicked;
@@ -78,11 +78,11 @@
                 try{
                     if(GLOBAL.webSocket === null){
                         if('WebSocket' in window){
-                            GLOBAL.webSocket = new WebSocket("ws://localhost:8087/webSocket/" + userId);
+                            GLOBAL.webSocket = new WebSocket(GLOBAL.webSocketUrl + userId);
                         }else if('MozWebSocket' in window){
-                            GLOBAL.webSocket = new MozWebSocket("ws://localhost:8087/webSocket/" + userId);
+                            GLOBAL.webSocket = new MozWebSocket(GLOBAL.webSocketUrl + userId);
                         }else{
-                            GLOBAL.webSocket = new SocketJs("ws://localhost:8087/webSocket/" + userId);
+                            GLOBAL.webSocket = new SocketJs(GLOBAL.webSocketUrl + userId);
                         }
                         this.init();
                         GLOBAL.lockReconnect = false;
@@ -115,7 +115,7 @@
                 this.reconnect();
             },
             webSocketGetMessage(msg){
-                console.log(msg);
+                //console.log(msg);
                 //alert(msg.data);
                 this.start();
             },
@@ -162,7 +162,7 @@
                 GLOBAL.webSocketTimeOutObj && clearTimeout(GLOBAL.webSocketTimeOutObj);
                 GLOBAL.webSocketServerTimeOutObj && clearTimeout(GLOBAL.webSocketServerTimeOutObj);
                 GLOBAL.webSocketTimeOutObj = setTimeout(function () {
-                    console.log("发送ping到后台")
+                    //console.log("发送ping到后台")
                     try {
                         GLOBAL.webSocket.send("ping");
                     }catch (e) {
@@ -186,20 +186,19 @@
     overflow-y: hidden;
   }
   .main {
-    background-color: blue;
+    background-color: #ededed;
     height: 92%;
     color: #333;
     padding: 0 0 0 0;
   }
   .footer {
-    background-color: red;
     height: 8%;
     color: #333;
     text-align: center;
     padding: 0 0 0 0;
   }
   .footer div{
-    background-color: #795da3;
+    background-color: #f7f7f7;
     height: 100%;
     line-height: 100%;
     padding: 0 0 0 0;

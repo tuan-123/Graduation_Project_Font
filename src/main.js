@@ -39,11 +39,13 @@ import 'echarts/map/js/world'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+import VueScroller from 'vue-scroller'
+Vue.use(VueScroller);
 Vue.use(VueAxios,axios);
 Vue.config.productionTip = false;
 //配置请求的根路径
-axios.defaults.baseURL = 'http://127.0.0.1:8087';
-//axios.defaults.baseURL = 'http://192.168.2.104:8087';
+//axios.defaults.baseURL = 'http://127.0.0.1:8087';
+axios.defaults.baseURL = 'http://192.168.43.143:8087';
 
 //通过axios的拦截器添加token验证
 axios.interceptors.request.use(config =>{
