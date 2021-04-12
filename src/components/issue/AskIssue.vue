@@ -4,7 +4,7 @@
       <span class="back" @click="toBack">
         <van-icon name="arrow-left" size="25"/>
       </span>
-      帮问发布
+      交流发布
     </div>
     <div class="main">
       <van-form @submit="onSubmit">
@@ -12,8 +12,8 @@
           type="textarea"
           v-model="askContent"
           name="askContent"
-          label="提问内容"
-          placeholder="快快描述你的疑问吧，让大家一起来解决"
+          label="交流内容"
+          placeholder="快快描述你的想法吧，让大家一起来交流叭"
           :rules="askContentRule"
           :required="true"
           clearable
@@ -88,7 +88,7 @@
             onSubmit(value){
                 Dialog.confirm({
                     title: '提示',
-                    message: '确认发起提问？'
+                    message: '确认发起交流？'
                 }).then(()=>{
                     //确认
                     //console.log(value.askContent);

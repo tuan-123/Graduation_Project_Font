@@ -16,7 +16,7 @@
                 fileList: [],
             }
         },
-        created(){
+        mounted(){
             this.url = this.$route.params.url;
         },
         methods:{

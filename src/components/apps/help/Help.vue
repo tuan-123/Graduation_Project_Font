@@ -111,12 +111,12 @@
         <nut-textinput
           class="my-input"
           v-model="inputValue"
-          placeholder="评论"
+          placeholder="留下您的想法叭"
           :clearBtnPersonnal="true"
         />
         </span>
       <span style="display: inline-block;float:left;width: 20%">
-          <van-button round color="red" @click="submitComment">评论</van-button>
+          <van-button round color="red" @click="submitComment">留言</van-button>
         </span>
     </div>
   </div>
