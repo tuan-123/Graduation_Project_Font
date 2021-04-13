@@ -27,6 +27,7 @@ import LinkBlank from "../components/blankPage/Link";
 import FaceLogin from "../views/FaceLogin";
 import FinishFaceLogin from "../components/user/FinishFaceLogin";
 import MyAcceptHelp from "../components/user/MyAcceptHelp";
+import ForgetPwd from "../views/ForgetPwd";
 
 
 
@@ -73,6 +74,11 @@ const router = new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/forgetPwd',
+      name: 'ForgetPwd',
+      component: ForgetPwd
     },
     {
       path: '/index',
@@ -195,7 +201,7 @@ const router = new Router({
 });
 //挂载路由导航卫士
 router.beforeEach((to,from,next) => {
-  if(to.path === '/login' || to.path === '/register' || to.path === '/faceLogin'){
+  if(to.path === '/login' || to.path === '/register' || to.path === '/faceLogin' || to.path === '/forgetPwd'){
     return next();
   }
   const tokenStr = window.sessionStorage.getItem('token');

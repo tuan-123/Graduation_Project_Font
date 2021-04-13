@@ -26,6 +26,9 @@
           <el-button type="primary" @click="onSubmit('form')">登录</el-button>
           <el-button type="info" @click="resetForm('form')">重置</el-button>
         </el-form-item>
+        <div class="fgpwd">
+          <span @click="fgpwd">忘记密码</span>
+        </div>
         <div class="toRegister">
           没有账号，
           <span @click="toRegister()">去注册</span>
@@ -165,6 +168,9 @@
             },
             clickFaceLogin(){
                 this.$router.push("/faceLogin");
+            },
+            fgpwd(){
+                this.$router.push("/forgetPwd")
             }
         }
     }
@@ -251,6 +257,15 @@
   .toRegister span{
     text-decoration: underline;
     color: #1296db;
+  }
+  .fgpwd{
+    float: left;
+    display: flex;
+    justify-content: flex-start;
+    text-decoration: underline;
+    color: #1296db;
+    font-size: 33px;
+    margin-bottom: 5px;
   }
 
   /deep/ .el-input__inner{
